@@ -22,7 +22,7 @@ UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* bytesNum)
     }
 
     int routeNum = data[2] & 0x7f;
-    UtzRouteHeader* header = (UtzRouteHeader*)TZMalloc(Mid, (int)sizeof(UtzRouteHeader) + routeNum * UTZ_IA_LEN);
+    UtzRouteHeader* header = (UtzRouteHeader*)TZMalloc(UtzMid, (int)sizeof(UtzRouteHeader) + routeNum * UTZ_IA_LEN);
     if (header == NULL) {
         return NULL;
     }
@@ -98,7 +98,7 @@ UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataL
     }
 
     // ¼Ó1ÊÇ¿¼ÂÇµ½ÃÜÂëÊÇ×Ö·û´®,CÓïÑÔÄ©Î²Ðè¼Ó'\0'
-    UtzSimpleSecurityHeader* header = (UtzSimpleSecurityHeader*)TZMalloc(Mid, (int)sizeof(UtzSimpleSecurityHeader) +
+    UtzSimpleSecurityHeader* header = (UtzSimpleSecurityHeader*)TZMalloc(UtzMid, (int)sizeof(UtzSimpleSecurityHeader) +
         headerPayloadLen + 1);
     header->NextHead = data[0];
     header->PwdLen = (uint8_t)headerPayloadLen;

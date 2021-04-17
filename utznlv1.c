@@ -8,11 +8,11 @@
 static uint8_t generateFrameIndex = 0;
 
 // 内存管理id
-int Mid = -1;
+int UtzMid = -1;
 
 // UtzLoad 模块载入
 void UtzLoad(int mid) {
-    Mid = mid;
+    UtzMid = mid;
 }
 
 // UtzBytesToStandardHeader 字节流转换为标准头部.字节流是大端
