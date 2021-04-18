@@ -24,22 +24,11 @@ void UtzMemcpyReverse(uint8_t* dst, uint8_t* src, int size);
 // 返回值是下一头部字节数.如果是0表示解析失败
 int UtzGetNextHeadLen(uint8_t* bytes, int size, int offset);
 
-// UtzHtons 2字节主机序转换为网络序
-uint16_t UtzHtons(uint16_t n);
+// UtzIAStrToHex IA地址字符串转整型
+bool UtzIAStrToHex(const char* src, uint64_t* dst);
 
-// UtzNtohs 2字节网络序转换为主机序
-uint16_t UtzNtohs(uint16_t n);
-
-// UtzHtonl 4字节主机序转换为网络序
-uint32_t UtzHtonl(uint32_t n);
-
-// UtzNtohl 4字节网络序转换为主机序
-uint32_t UtzNtohl(uint32_t n);
-
-// UtzHtonll 8字节主机序转换为网络序
-uint64_t UtzHtonll(uint64_t n);
-
-// UtzNtohll 8字节网络序转换为主机序
-uint64_t UtzNtohll(uint64_t n);
+// UtzIAToStr IA地址转字符串形式
+// type：0：标准输出；1：前导0压缩；2：全0压缩输出
+bool UtzIAHexToStr(uint64_t src, char* dst, int type);
 
 #endif

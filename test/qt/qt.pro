@@ -12,12 +12,14 @@ SOURCES += \
     ../../utzehp.c \
     ../../utzflp.c \
     ../../utznlv1.c \
-    ../../lib/scunit-clang/scunit.c
+    ../../lib/scunit-clang/scunit.c \
+    ../../lib/tzbox/tzbox.c
 
 INCLUDEPATH += ../../ \
     ../../lib/crc16-clang \
     ../../lib/tzmalloc \
-    ../../lib/scunit-clang
+    ../../lib/scunit-clang \
+    ../../lib/tzbox
 
 HEADERS += \
     ../../lib/crc16-clang/crc16.h \
@@ -29,4 +31,5 @@ HEADERS += \
     ../../utzehp.h \
     ../../utzflp.h \
     ../../utznlv1.h \
-    ../../lib/scunit-clang/scunit.h
+    ../../lib/scunit-clang/scunit.h \
+    ../../lib/tzbox/tzbox.h

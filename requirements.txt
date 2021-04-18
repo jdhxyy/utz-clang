@@ -1,3 +1,4 @@
 https://github.com/jdhxyy/crc16-clang.git
 https://github.com/jdhxyy/tzmalloc.git
+https://github.com/jdhxyy/tzbox.git
 https://github.com/jdhxyy/scunit-clang.git

@@ -4,6 +4,11 @@
 
 #include "utzcommon.h"
 #include "utznlv1.h"
+#include "tzbox.h"
+
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 // BytesToIA 从字节流中取出IA地址.字节流是大端
 // 字节流长度必须保证大于IA_LEN
@@ -40,42 +45,126 @@ int UtzGetNextHeadLen(uint8_t* bytes, int size, int offset) {
     return nextHeadLen;
 }
 
-// UtzHtons 2字节主机序转换为网络序
-uint16_t UtzHtons(uint16_t n) {
-    return (uint16_t)(((n & 0xff) << 8) | ((n & 0xff00) >> 8));
+// UtzIAStrToHex IA地址字符串转整型
+bool UtzIAStrToHex(const char* src, uint64_t* dst) {
+    uint8_t dbuf[8];
+    uint8_t* datap = dbuf;
+    uint8_t* dc = NULL;
+    const char* sp;
+    char* np;  
+    int mask = 0;
+    uint64_t res;
+    uint8_t* resp = (uint8_t*)&res;
+    uint32_t data;
+
+    if (src == NULL) {
+        return false;
+    }
+    sp = src;
+    memset(dbuf, 0, sizeof(dbuf));
+
+    while (1) {
+        data = (uint32_t)strtol(sp, &np, 16);
+       
+        if (sp < np) {
+            *datap++ = (data >> 8) & 0xff;
+            *datap++ = data & 0xff;
+            if (*np == ':') {
+                mask = 1;
+            }
+        } else {           
+            if (*np == ':' && mask) {
+                dc = datap;
+            } else {
+                mask = 1;
+            }            
+        }
+        
+        if (*np != ':' && *np != '\0') {
+           return false;
+        }
+
+        if (*np == '\0') {
+            break;
+        }
+        sp = np + 1; 
+    }
+
+    int i = 7; 
+    datap--;
+
+    if (dc) {
+        while (datap >= dc)
+            resp[i--] = *datap--;
+        while (i >= dc - dbuf)
+            resp[i--] = 0;
+        while (i >= 0)
+            resp[i--] = *datap--;
+    } else
+        memcpy(resp, dbuf, sizeof(dbuf)); 
+    TZBoxMemcpyReverse((uint8_t*)dst, (uint8_t*)&res, sizeof(uint64_t));         
+
+    return true;
 }
 
-// UtzNtohs 2字节网络序转换为主机序
-uint16_t UtzNtohs(uint16_t n) {
-    return UtzHtons(n);
-}
+// UtzIAHexToStr IA地址转字符串形式
+// type：0：标准输出；1：前导0压缩；2：全0压缩输出
+bool UtzIAHexToStr(uint64_t src, char* dst, int type) {
+    #define SRCARR_LEN 4
 
-// UtzHtonl 4字节主机序转换为网络序
-uint32_t UtzHtonl(uint32_t n) {
-    return ((n & 0xff) << 24) |
-        ((n & 0xff00) << 8) |
-        ((n & 0xff0000UL) >> 8) |
-        ((n & 0xff000000UL) >> 24);
-}
+    char str[5];
+    uint16_t srcarr[SRCARR_LEN];
+    uint16_t *dp;
+    int mask = 0;
+    if (dst == NULL) {
+        return false;
+    }
 
-// UtzNtohl 4字节网络序转换为主机序
-uint32_t UtzNtohl(uint32_t n) {
-    return UtzHtonl(n);
-}
+    dst[0] = '\0';
+    memcpy((uint8_t*)&srcarr, (uint8_t*)&src, sizeof(uint64_t));                      
 
-// UtzHtonll 8字节主机序转换为网络序
-uint64_t UtzHtonll(uint64_t n) {
-    return ((n & 0xff) << 56) |
-        ((n & 0xff00) << 40) |
-        ((n & 0xff0000) << 24) |
-        ((n & 0xff000000) << 8) |
-        ((n & 0xff00000000ULL) >> 8) |
-        ((n & 0xff0000000000ULL) >> 24) |
-        ((n & 0xff000000000000ULL) >> 40) |
-        ((n & 0xff00000000000000ULL) >> 56);
-}
+    dp = srcarr + (SRCARR_LEN - 1);                         
+    switch (type) {
+    case 0:
+        while (dp >= srcarr) {
+            sprintf(str, "%04x", *dp--);
+            strcat(dst, str);
+            if (dp >= srcarr)
+                strcat(dst, ":");
+        }    
 
-// UtzNtohll 8字节网络序转换为主机序
-uint64_t UtzNtohll(uint64_t n) {
-    return UtzHtonll(n);
+        break;
+    case 1:
+        while (dp >= srcarr) {
+            sprintf(str, "%x", *dp--);
+            strcat(dst, str);
+            if (dp >= srcarr)
+                strcat(dst, ":");
+        }
+   
+        break;
+    case 2:
+        while (dp >= srcarr) {
+            if (*dp == 0) {
+                if (mask < 2) {
+                    strcat(dst,":");
+                    mask++;
+                }
+                dp--;
+            } else {
+                sprintf(str, "%x", *dp--);
+                strcat(dst, str);
+                if (dp >= srcarr) {
+                    strcat(dst, ":");
+                    mask = 1;
+                }
+            }       
+        }   
+
+        break;
+    default:
+        return false;
+    }
+
+    return true;
 }

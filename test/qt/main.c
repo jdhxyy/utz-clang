@@ -10,6 +10,7 @@ static void case2(void);
 static void case3(void);
 static void case4(void);
 static void case5(void);
+static void case6(void);
 
 int main() {
     TZMallocLoad(0, 10, 1024, malloc(1024));
@@ -23,6 +24,7 @@ int main() {
     ScunitAddTest("case3", case3);
     ScunitAddTest("case4", case4);
     ScunitAddTest("case5", case5);
+    ScunitAddTest("case6", case6);
     return 0;
 }
 
@@ -150,4 +152,23 @@ static void case5(void) {
 
     TZFree(header1);
     TZFree(header2);
+}
+
+static void case6(void) {
+    uint64_t ia = 0;
+    bool result = UtzIAStrToHex("2141::2", &ia);
+    ScunitAssert(result == true, "1");
+    ScunitAssert(ia == 0x2141000000000002, "1");
+
+    result = UtzIAStrToHex("2141:0:0:2", &ia);
+    ScunitAssert(result == true, "2");
+    ScunitAssert(ia == 0x2141000000000002, "2");
+
+    char str[32] = {0};
+    UtzIAHexToStr(0x2141000000000002, str, 0);
+    ScunitAssert(strcmp(str, "2141:0000:0000:0002") == 0, "3");
+    UtzIAHexToStr(0x2141000000000002, str, 1);
+    ScunitAssert(strcmp(str, "2141:0:0:2") == 0, "3");
+    UtzIAHexToStr(0x2141000000000002, str, 2);
+    ScunitAssert(strcmp(str, "2141::2") == 0, "3");
 }
