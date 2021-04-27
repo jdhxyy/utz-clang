@@ -7,9 +7,6 @@
 
 static uint8_t generateFrameIndex = 0;
 
-// 内存管理id
-int UtzMid = -1;
-
 // UtzLoad 模块载入
 void UtzLoad(int mid) {
     UtzMid = mid;

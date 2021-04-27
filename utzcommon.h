@@ -8,6 +8,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// 内存管理id
+extern int UtzMid;
+
 // BytesToIA 从字节流中取出IA地址.字节流是大端
 // 字节流长度必须保证大于IA_LEN
 uint64_t UtzBytesToIA(uint8_t* data);

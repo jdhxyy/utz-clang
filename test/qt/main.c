@@ -2,6 +2,7 @@
 #include "utz.h"
 #include "scunit.h"
 #include "tzmalloc.h"
+#include "tztype.h"
 
 static int mid = -1;
 
@@ -81,17 +82,17 @@ static void case3(void) {
     header1->IAList[1] = 0x1234567812345678;
     header1->IAList[2] = 0x1234567812345679;
 
-    uint8_t data1[100] = {0};
-    int num = UtzRouteHeaderToBytes(header1, data1, 100);
-    ScunitAssert(num == 27, "1");
+    TZBufferDynamic* data1 = UtzRouteHeaderToBytes(header1);
+    ScunitAssert(data1->len == 27, "1");
 
     // 转换后的字节流:02 19 83 12 34 56 78 12 34 56 77 12 34 56 78 12 34 56 78 12 34 56 78 12 34 56 79
     uint8_t data2[] = {0x02, 0x19, 0x83, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x77, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x79};
     for (int i = 0; i < (int)sizeof(data2); i++) {
-         ScunitAssert(data2[i] == data1[i], "2");
+        ScunitAssert(data2[i] == data1->buf[i], "2");
     }
 
-    UtzRouteHeader* header2 = UtzBytesToRouteHeader(data1, 100, &num);
+    int num = 0;
+    UtzRouteHeader* header2 = UtzBytesToRouteHeader(data1->buf, data1->len, &num);
     ScunitAssert(num == 27, "3");
     ScunitAssert(header2->NextHead == header1->NextHead, "4");
     ScunitAssert(header2->RouteNum == header1->RouteNum, "4");
@@ -102,29 +103,31 @@ static void case3(void) {
 
     TZFree(header1);
     TZFree(header2);
+    TZFree(data1);
 }
 
 static void case4(void) {
     uint8_t data[] = {1, 2, 3, 4, 5};
-    uint8_t frame1[100] = {0};
-    int num = UtzBytesToFlpFrame(data, 5, true, 15, frame1, 100);
-    ScunitAssert(num == 15, "1");
+    TZBufferDynamic* frame1 = UtzBytesToFlpFrame(data, 5, true, 15);
+    ScunitAssert(frame1->len == 15, "1");
 
     // 转换后的字节流:80 06 2a bb 01 02 03 04 05 00 00 00 00 00 00
     uint8_t frame2[] = {0x80, 0x06, 0x2a, 0xbb, 0x01, 0x02, 0x03, 0x04, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     for (int i = 0; i < (int)sizeof(frame2); i++) {
-         ScunitAssert(frame2[i] == frame1[i], "2");
+        ScunitAssert(frame2[i] == frame1->buf[i], "2");
     }
 
-    uint8_t frame3[100] = {0};
-    num = UtzBytesToFlpFrame(data, 5, false, 15, frame3, 100);
-    ScunitAssert(num == 15, "3");
+    TZBufferDynamic* frame3 = UtzBytesToFlpFrame(data, 5, false, 15);
+    ScunitAssert(frame3->len == 15, "3");
 
     // 转换后的字节流:00 08 01 02 03 04 05 00 00 00 00 00 00 00 00
     uint8_t frame4[] = {0x00, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     for (int i = 0; i < (int)sizeof(frame2); i++) {
-         ScunitAssert(frame4[i] == frame3[i], "4");
+        ScunitAssert(frame4[i] == frame3->buf[i], "4");
     }
+
+    TZFree(frame1);
+    TZFree(frame3);
 }
 
 static void case5(void) {

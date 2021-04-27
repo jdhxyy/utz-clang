@@ -5,8 +5,7 @@
 #ifndef UTZ_FLP_H
 #define UTZ_FLP_H
 
-#include <stdint.h>
-#include <stdbool.h>
+#include "tztype.h"
 
 // 版本
 #define UTZ_FLP_VERSION_NAME "1.2"
@@ -16,11 +15,11 @@
 
 // UtzBytesToFlpFrame 字节流转换为FLP帧
 // fixedLen为0表示不是固定长度帧,不需要尾缀
-// 返回值FLP帧长.如果为0表示转换失败
-int UtzBytesToFlpFrame(uint8_t* data, int dataLen, bool isNeedCrc, int fixedLen, uint8_t* frame, int frameSize);
+// 返回值FLP帧.如果是NULL表示转换失败.转换成功要注意释放指针
+TZBufferDynamic* UtzBytesToFlpFrame(uint8_t* data, int dataLen, bool isNeedCrc, int fixedLen);
 
 // UtzFlpFrameToBytes FLP帧转换为字节流.字节流是FLP帧的数据正文
-// 返回转换后的字节流长度.如果是0表示转换失败
-int UtzFlpFrameToBytes(uint8_t* frame, int frameLen, uint8_t* data, int dataSize);
+// 返回字节流.如果是NULL表示转换失败.转换成功要注意释放指针
+TZBufferDynamic* UtzFlpFrameToBytes(uint8_t* frame, int frameLen);
 
 #endif

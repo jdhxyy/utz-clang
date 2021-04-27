@@ -19,7 +19,8 @@ INCLUDEPATH += ../../ \
     ../../lib/crc16-clang \
     ../../lib/tzmalloc \
     ../../lib/scunit-clang \
-    ../../lib/tzbox
+    ../../lib/tzbox \
+    ../../lib/tztype-clang
 
 HEADERS += \
     ../../lib/crc16-clang/crc16.h \
@@ -32,4 +33,5 @@ HEADERS += \
     ../../utzflp.h \
     ../../utznlv1.h \
     ../../lib/scunit-clang/scunit.h \
-    ../../lib/tzbox/tzbox.h
+    ../../lib/tzbox/tzbox.h \
+    ../../lib/tztype-clang/tztype.h

@@ -11,10 +11,12 @@
 #include <string.h>
 
 // UtzBytesToRouteHeader 字节流转换为路由头部
-// bytesNum是返回的转换头部的字节流字节数.如果为0表示转换失败
+// offset是转换后字节流新的偏移地址.如果为0表示转换失败.不需要知道可填写NULL
 // 返回头部指针,为NULL表示转换失败.转换成功要注意释放指针
-UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* bytesNum) {
-    *bytesNum = 0;
+UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* offset) {
+    if (offset != NULL) {
+        *offset = 0;
+    }
 
     // 头部数据必须完整
     if (dataLen < 3) {
@@ -40,38 +42,45 @@ UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* bytesNum)
         return NULL;
     }
 
-    int offset = 3;
+    int newOffset = 3;
     for (int i = 0; i < header->RouteNum; i++) {
-        header->IAList[i] = UtzBytesToIA(data + offset);
-        offset += UTZ_IA_LEN;
+        header->IAList[i] = UtzBytesToIA(data + newOffset);
+        newOffset += UTZ_IA_LEN;
     }
-    *bytesNum = offset;
+
+    if (offset != NULL) {
+        *offset = newOffset;
+    }
     return header;
 }
 
 // UtzRouteHeaderToBytes 路由头部转换为字节流
-// 返回的是字节数.如果为0表示转换失败
-int UtzRouteHeaderToBytes(UtzRouteHeader* header, uint8_t* data, int dataSize) {
-    if (dataSize < header->RouteNum * UTZ_IA_LEN + 3) {
-        return 0;
+// 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
+TZBufferDynamic* UtzRouteHeaderToBytes(UtzRouteHeader* header) {
+    int dataLen = (int)sizeof(TZBufferDynamic) + header->RouteNum * UTZ_IA_LEN + 3;
+    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzMid, dataLen);
+    if (data == NULL) {
+        return NULL;
     }
 
     int j = 0;
-    data[j++] = header->NextHead;
+    data->buf[j++] = header->NextHead;
     // 头部数据长度
-    data[j++] = header->RouteNum * UTZ_IA_LEN + 1;
+    data->buf[j++] = header->RouteNum * UTZ_IA_LEN + 1;
 
     uint8_t routeNum = header->RouteNum & 0x7f;
     if (header->IsStrict) {
         routeNum |= 0x80;
     }
-    data[j++] = routeNum;
+    data->buf[j++] = routeNum;
 
     for (int i = 0; i < header->RouteNum; i++) {
-        UtzIAToBytes(header->IAList[i], data + j);
+        UtzIAToBytes(header->IAList[i], data->buf + j);
         j += UTZ_IA_LEN;
     }
-    return j;
+
+    data->len = j;
+    return data;
 }
 
 // UtzIsPayloadHeader 是否载荷头部

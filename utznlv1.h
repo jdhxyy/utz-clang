@@ -61,9 +61,6 @@ typedef struct {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 #pragma pack()
 
-// 内存管理id
-extern int UtzMid;
-
 // UtzLoad 模块载入
 void UtzLoad(int mid);
 

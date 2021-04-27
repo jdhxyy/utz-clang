@@ -5,8 +5,7 @@
 #ifndef UTZ_EHP_H
 #define UTZ_EHP_H
 
-#include <stdint.h>
-#include <stdbool.h>
+#include "tztype.h"
 
 // 版本
 #define UTZ_EHP_VERSION_NAME "1.1"
@@ -105,14 +104,14 @@ typedef struct {
 
 #pragma pack()
 
-// BytesToRouteHeader 字节流转换为路由头部
-// bytesNum是返回的转换头部的字节流字节数.如果为0表示转换失败
+// UtzBytesToRouteHeader 字节流转换为路由头部
+// offset是转换后字节流新的偏移地址.如果为0表示转换失败.不需要知道可填写NULL
 // 返回头部指针,为NULL表示转换失败.转换成功要注意释放指针
-UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* bytesNum);
+UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* offset);
 
 // UtzRouteHeaderToBytes 路由头部转换为字节流
-// 返回的是字节数.如果为0表示转换失败
-int UtzRouteHeaderToBytes(UtzRouteHeader* header, uint8_t* data, int dataSize);
+// 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
+TZBufferDynamic* UtzRouteHeaderToBytes(UtzRouteHeader* header);
 
 // UtzIsPayloadHeader 是否载荷头部
 bool UtzIsPayloadHeader(uint8_t head);
