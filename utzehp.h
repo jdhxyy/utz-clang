@@ -117,12 +117,16 @@ TZBufferDynamic* UtzRouteHeaderToBytes(UtzRouteHeader* header);
 bool UtzIsPayloadHeader(uint8_t head);
 
 // UtzBytesToSimpleSecurityHeader 字节流转换为简单安全头部
-// bytesNum是返回的转换头部的字节流字节数.如果为0表示转换失败
+// offset是转换后字节流新的偏移地址.如果为0表示转换失败.不需要知道可填写NULL
 // 返回头部指针,为NULL表示转换失败.转换成功要注意释放指针
-UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataLen, int* bytesNum);
+UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataLen, int* offset);
 
 // SimpleSecurityHeaderToBytes 简单安全头部转换为字节流
-// 返回的是字节数.如果为0表示转换失败
-int UtzSimpleSecurityHeaderToBytes(UtzSimpleSecurityHeader* header, uint8_t* data, int dataSize);
+// 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
+TZBufferDynamic* UtzSimpleSecurityHeaderToBytes(UtzSimpleSecurityHeader* header);
+
+// UtzSimpleSecurityHeaderDataToBytes 简单安全头部数据转换为字节流
+// 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
+TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd);
 
 #endif

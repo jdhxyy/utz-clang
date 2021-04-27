@@ -92,10 +92,12 @@ bool UtzIsPayloadHeader(uint8_t head) {
     }
 
 // UtzBytesToSimpleSecurityHeader 字节流转换为简单安全头部
-// bytesNum是返回的转换头部的字节流字节数.如果为0表示转换失败
+// offset是转换后字节流新的偏移地址.如果为0表示转换失败.不需要知道可填写NULL
 // 返回头部指针,为NULL表示转换失败.转换成功要注意释放指针
-UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataLen, int* bytesNum) {
-    *bytesNum = 0;
+UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataLen, int* offset) {
+    if (offset != NULL) {
+        *offset = 0;
+    }
 
     // 头部数据必须完整
     if (dataLen < 2) {
@@ -112,23 +114,34 @@ UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataL
     header->NextHead = data[0];
     header->PwdLen = (uint8_t)headerPayloadLen;
     memcpy(header->Pwd, data + 2, (uint64_t)headerPayloadLen);
-    *bytesNum = 2 + headerPayloadLen;
+    if (offset != NULL) {
+        *offset = 2 + headerPayloadLen;
+    }
     return header;
 }
 
 // SimpleSecurityHeaderToBytes 简单安全头部转换为字节流
-// 返回的是字节数.如果为0表示转换失败
-int UtzSimpleSecurityHeaderToBytes(UtzSimpleSecurityHeader* header, uint8_t* data, int dataSize) {
-    if (dataSize < header->PwdLen + 2) {
-        return 0;
+// 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
+TZBufferDynamic* UtzSimpleSecurityHeaderToBytes(UtzSimpleSecurityHeader* header) {
+    return UtzSimpleSecurityHeaderDataToBytes(header->NextHead, (char*)header->Pwd);
+}
+
+// UtzSimpleSecurityHeaderDataToBytes 简单安全头部数据转换为字节流
+// 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
+TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd) {
+    int pwdLen = (int)strlen(pwd);
+    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzMid, (int)sizeof(TZBufferDynamic) + pwdLen + 2);
+    if (data == NULL) {
+        return NULL;
     }
 
     int j = 0;
-    data[j++] = header->NextHead;
+    data->buf[j++] = nextHead;
     // 头部数据长度
-    data[j++] = header->PwdLen;
+    data->buf[j++] = (uint8_t)pwdLen;
 
-    memcpy(data + j, header->Pwd, header->PwdLen);
-    j += header->PwdLen;
-    return j;
+    memcpy(data->buf + j, pwd, (size_t)pwdLen);
+    j += pwdLen;
+    data->len = j;
+    return data;
 }

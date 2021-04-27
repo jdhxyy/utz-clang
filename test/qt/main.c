@@ -137,17 +137,17 @@ static void case5(void) {
     memcpy(header1->Pwd, "jdh99", 5);
     header1->PwdLen = 5;
 
-    uint8_t data1[100] = {0};
-    int num = UtzSimpleSecurityHeaderToBytes(header1, data1, 100);
-    ScunitAssert(num == 7, "1");
+    TZBufferDynamic* data1 = UtzSimpleSecurityHeaderToBytes(header1);
+    ScunitAssert(data1->len == 7, "1");
 
     // 转换后的字节流:05 05 6a 64 68 39 39
     uint8_t data2[] = {0x05, 0x05, 0x6a, 0x64, 0x68, 0x39, 0x39};
     for (int i = 0; i < (int)sizeof(data2); i++) {
-         ScunitAssert(data2[i] == data1[i], "2");
+         ScunitAssert(data2[i] == data1->buf[i], "2");
     }
 
-    UtzSimpleSecurityHeader* header2 = UtzBytesToSimpleSecurityHeader(data1, 100, &num);
+    int num = 0;
+    UtzSimpleSecurityHeader* header2 = UtzBytesToSimpleSecurityHeader(data1->buf, data1->len, &num);
     ScunitAssert(num == 7, "3");
     ScunitAssert(header2->NextHead == header1->NextHead, "4");
     ScunitAssert(header2->PwdLen == header1->PwdLen, "4");
@@ -155,6 +155,7 @@ static void case5(void) {
 
     TZFree(header1);
     TZFree(header2);
+    TZFree(data1);
 }
 
 static void case6(void) {
