@@ -6,12 +6,26 @@
 #include "utznlv1.h"
 #include "tzbox.h"
 
+#include "tzmalloc.h"
+#include "lagan.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 // 内存管理id
-int UtzMid = -1;
+static int mid = -1;
+
+// UtzGetMid 读取内存id
+int UtzGetMid(void) {
+    if (mid == -1) {
+        mid = TZMallocRegister(0, UTZ_TAG, UTZ_MALLOC_SIZE);
+        if (mid == -1) {
+            LE(UTZ_TAG, "malloc register failed!");
+        }
+    }
+    return mid;
+}
 
 // BytesToIA 从字节流中取出IA地址.字节流是大端
 // 字节流长度必须保证大于IA_LEN

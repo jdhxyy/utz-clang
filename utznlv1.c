@@ -7,11 +7,6 @@
 
 static uint8_t generateFrameIndex = 0;
 
-// UtzLoad 模块载入
-void UtzLoad(int mid) {
-    UtzMid = mid;
-}
-
 // UtzBytesToStandardHeader 字节流转换为标准头部.字节流是大端
 // 字节流data必须大于标准头部长度
 // 返回头部以及头部字节数.头部为nil或者字节数为0表示转换失败

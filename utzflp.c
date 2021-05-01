@@ -7,6 +7,7 @@
 
 #include "crc16.h"
 #include "tzmalloc.h"
+#include "lagan.h"
 
 #include <string.h>
 
@@ -18,8 +19,9 @@ TZBufferDynamic* UtzBytesToFlpFrame(uint8_t* data, int dataLen, bool isNeedCrc, 
     if (fixedLen > dataLen) {
         frameSize += fixedLen - dataLen;
     }
-    TZBufferDynamic* frame = (TZBufferDynamic*)TZMalloc(UtzMid, frameSize);
+    TZBufferDynamic* frame = (TZBufferDynamic*)TZMalloc(UtzGetMid(), frameSize);
     if (frame == NULL) {
+        LE(UTZ_TAG, "bytes to flp frame failed!malloc failed!");
         return NULL;
     }
 
@@ -80,8 +82,9 @@ TZBufferDynamic* UtzFlpFrameToBytes(uint8_t* frame, int frameLen) {
         return NULL;
     }
 
-    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzMid, (int)sizeof(TZBufferDynamic) + frameLen);
+    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzGetMid(), (int)sizeof(TZBufferDynamic) + frameLen);
     if (data == NULL) {
+        LE(UTZ_TAG, "flp frame to bytes failed!malloc failed!");
         return NULL;
     }
 

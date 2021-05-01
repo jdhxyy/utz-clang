@@ -7,6 +7,7 @@
 #include "utzcommon.h"
 
 #include "tzmalloc.h"
+#include "lagan.h"
 
 #include <string.h>
 
@@ -24,8 +25,9 @@ UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* offset) {
     }
 
     int routeNum = data[2] & 0x7f;
-    UtzRouteHeader* header = (UtzRouteHeader*)TZMalloc(UtzMid, (int)sizeof(UtzRouteHeader) + routeNum * UTZ_IA_LEN);
+    UtzRouteHeader* header = (UtzRouteHeader*)TZMalloc(UtzGetMid(), (int)sizeof(UtzRouteHeader) + routeNum * UTZ_IA_LEN);
     if (header == NULL) {
+        LE(UTZ_TAG, "bytes to route header failed!malloc failed!");
         return NULL;
     }
 
@@ -58,8 +60,9 @@ UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* offset) {
 // 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
 TZBufferDynamic* UtzRouteHeaderToBytes(UtzRouteHeader* header) {
     int dataLen = (int)sizeof(TZBufferDynamic) + header->RouteNum * UTZ_IA_LEN + 3;
-    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzMid, dataLen);
+    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzGetMid(), dataLen);
     if (data == NULL) {
+        LE(UTZ_TAG, "route header to bytes failed!malloc failed!");
         return NULL;
     }
 
@@ -109,8 +112,12 @@ UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataL
     }
 
     // 加1是考虑到密码是字符串,C语言末尾需加'\0'
-    UtzSimpleSecurityHeader* header = (UtzSimpleSecurityHeader*)TZMalloc(UtzMid, (int)sizeof(UtzSimpleSecurityHeader) +
-        headerPayloadLen + 1);
+    UtzSimpleSecurityHeader* header = (UtzSimpleSecurityHeader*)TZMalloc(UtzGetMid(), 
+        (int)sizeof(UtzSimpleSecurityHeader) + headerPayloadLen + 1);
+    if (header == NULL) {
+        LE(UTZ_TAG, "bytes to simple security header failed!malloc failed!");
+        return NULL;
+    }
     header->NextHead = data[0];
     header->PwdLen = (uint8_t)headerPayloadLen;
     memcpy(header->Pwd, data + 2, (uint64_t)headerPayloadLen);
@@ -130,8 +137,9 @@ TZBufferDynamic* UtzSimpleSecurityHeaderToBytes(UtzSimpleSecurityHeader* header)
 // 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
 TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd) {
     int pwdLen = (int)strlen(pwd);
-    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzMid, (int)sizeof(TZBufferDynamic) + pwdLen + 2);
+    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzGetMid(), (int)sizeof(TZBufferDynamic) + pwdLen + 2);
     if (data == NULL) {
+        LE(UTZ_TAG, "simple security header data to bytes failed!malloc failed!");
         return NULL;
     }
 

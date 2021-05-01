@@ -15,8 +15,7 @@ static void case6(void);
 
 int main() {
     TZMallocLoad(0, 10, 1024, malloc(1024));
-    mid = TZMallocRegister(0, "utz", 1024);
-    UtzLoad(mid);
+    mid = TZMallocRegister(0, "test", 1024);
 
     ScunitLoad((ScunitPrintFunc)printf);
     ScunitAddSuite("test_utz");

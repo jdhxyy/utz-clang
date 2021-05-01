@@ -13,14 +13,16 @@ SOURCES += \
     ../../utzflp.c \
     ../../utznlv1.c \
     ../../lib/scunit-clang/scunit.c \
-    ../../lib/tzbox/tzbox.c
+    ../../lib/tzbox/tzbox.c \
+    ../../lib/lagan-clang/lagan.c
 
 INCLUDEPATH += ../../ \
     ../../lib/crc16-clang \
     ../../lib/tzmalloc \
     ../../lib/scunit-clang \
     ../../lib/tzbox \
-    ../../lib/tztype-clang
+    ../../lib/tztype-clang \
+    ../../lib/lagan-clang
 
 HEADERS += \
     ../../lib/crc16-clang/crc16.h \
@@ -34,4 +36,5 @@ HEADERS += \
     ../../utznlv1.h \
     ../../lib/scunit-clang/scunit.h \
     ../../lib/tzbox/tzbox.h \
-    ../../lib/tztype-clang/tztype.h
+    ../../lib/tztype-clang/tztype.h \
+    ../../lib/lagan-clang/lagan.h
