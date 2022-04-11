@@ -5,36 +5,40 @@ CONFIG -= qt
 
 SOURCES += \
         main.c \
-    ../../lib/crc16-clang/crc16.c \
-    ../../lib/tzmalloc/bget.c \
-    ../../lib/tzmalloc/tzmalloc.c \
+    ../../clib/crc16-clang/crc16.c \
+    ../../clib/tzmalloc/bget.c \
+    ../../clib/tzmalloc/tzmalloc.c \
     ../../utzcommon.c \
     ../../utzehp.c \
     ../../utzflp.c \
-    ../../utznlv1.c \
-    ../../lib/scunit-clang/scunit.c \
-    ../../lib/tzbox/tzbox.c \
-    ../../lib/lagan-clang/lagan.c
+    ../../utznlp.c \
+    ../../utzccp.c \
+    ../../utzadhoccmp.c \
+    ../../clib/scunit-clang/scunit.c \
+    ../../clib/tzbox/tzbox.c \
+    ../../clib/lagan-clang/lagan.c
 
 INCLUDEPATH += ../../ \
-    ../../lib/crc16-clang \
-    ../../lib/tzmalloc \
-    ../../lib/scunit-clang \
-    ../../lib/tzbox \
-    ../../lib/tztype-clang \
-    ../../lib/lagan-clang
+    ../../clib/crc16-clang \
+    ../../clib/tzmalloc \
+    ../../clib/scunit-clang \
+    ../../clib/tzbox \
+    ../../clib/tztype-clang \
+    ../../clib/lagan-clang
 
 HEADERS += \
-    ../../lib/crc16-clang/crc16.h \
-    ../../lib/tzmalloc/bget.h \
-    ../../lib/tzmalloc/tzmalloc.h \
+    ../../clib/crc16-clang/crc16.h \
+    ../../clib/tzmalloc/bget.h \
+    ../../clib/tzmalloc/tzmalloc.h \
     ../../utz.h \
     ../../utzcmp.h \
     ../../utzcommon.h \
     ../../utzehp.h \
     ../../utzflp.h \
-    ../../utznlv1.h \
-    ../../lib/scunit-clang/scunit.h \
-    ../../lib/tzbox/tzbox.h \
-    ../../lib/tztype-clang/tztype.h \
-    ../../lib/lagan-clang/lagan.h
+    ../../utznlp.h \
+    ../../utzccp.h \
+    ../../utzadhoccmp.h \
+    ../../clib/scunit-clang/scunit.h \
+    ../../clib/tzbox/tzbox.h \
+    ../../clib/tztype-clang/tztype.h \
+    ../../clib/lagan-clang/lagan.h

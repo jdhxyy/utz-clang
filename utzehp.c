@@ -1,9 +1,9 @@
-// Copyright 2021-2021 The jdh99 Authors. All rights reserved.
+// Copyright 2021-2022 The jdh99 Authors. All rights reserved.
 // RFF 2：Extension Header Protocol(EHP)
 // Authors: jdh99 <jdh821@163.com>
 
 #include "utzehp.h"
-#include "utznlv1.h"
+#include "utznlp.h"
 #include "utzcommon.h"
 
 #include "tzmalloc.h"
@@ -11,87 +11,39 @@
 
 #include <string.h>
 
-// UtzBytesToRouteHeader 字节流转换为路由头部
-// offset是转换后字节流新的偏移地址.如果为0表示转换失败.不需要知道可填写NULL
-// 返回头部指针,为NULL表示转换失败.转换成功要注意释放指针
-UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* offset) {
-    if (offset != NULL) {
-        *offset = 0;
-    }
-
+// UtzBytesToRouteHeader 字节流转换为路由头部.字节流是大端
+// 字节流data必须大于路由头部长度
+// 返回头部以及头部字节数.头部为nil或者字节数为0表示转换失败
+int UtzBytesToRouteHeader(uint8_t* data, int dataLen, UtzRouteHeader* header) {
     // 头部数据必须完整
-    if (dataLen < 3) {
-        return NULL;
-    }
-
-    int routeNum = data[2] & 0x7f;
-    UtzRouteHeader* header = (UtzRouteHeader*)TZMalloc(UtzGetMid(), (int)sizeof(UtzRouteHeader) + routeNum * UTZ_IA_LEN);
-    if (header == NULL) {
-        LE(UTZ_TAG, "bytes to route header failed!malloc failed!");
-        return NULL;
+    if (dataLen < 5) {
+        return 0;
     }
 
     header->NextHead = data[0];
-    int headerPayloadLen = data[1];
-    if (dataLen < 2 + headerPayloadLen) {
-        return NULL;
-    }
-
-    // 总长度不应该小于路由地址总长度
-    header->RouteNum = data[2] & 0x7f;
-    header->IsStrict = (data[2] >> 7) == 0x1;
-    if (dataLen < 3 + header->RouteNum * UTZ_IA_LEN) {
-        return NULL;
-    }
-
-    int newOffset = 3;
-    for (int i = 0; i < header->RouteNum; i++) {
-        header->IAList[i] = UtzBytesToIA(data + newOffset);
-        newOffset += UTZ_IA_LEN;
-    }
-
-    if (offset != NULL) {
-        *offset = newOffset;
-    }
-    return header;
+    header->IA = UtzBytesToIA(data + 1);
+    return 5;
 }
 
-// UtzRouteHeaderToBytes 路由头部转换为字节流
-// 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
-TZBufferDynamic* UtzRouteHeaderToBytes(UtzRouteHeader* header) {
-    int dataLen = (int)sizeof(TZBufferDynamic) + header->RouteNum * UTZ_IA_LEN + 3;
-    TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzGetMid(), dataLen);
-    if (data == NULL) {
-        LE(UTZ_TAG, "route header to bytes failed!malloc failed!");
-        return NULL;
+// UtzRouteHeader 路由头部转换为字节流
+// 字节流data必须大于路由头部长度
+// 返回值是转换后的字节流的长度.返回值是0表示转换失败
+int UtzRouteHeaderToBytes(UtzRouteHeader* header, uint8_t* data, int dataSize) {
+    if (dataSize < 5) {
+        return 0;
     }
-
-    int j = 0;
-    data->buf[j++] = header->NextHead;
-    // 头部数据长度
-    data->buf[j++] = header->RouteNum * UTZ_IA_LEN + 1;
-
-    uint8_t routeNum = header->RouteNum & 0x7f;
-    if (header->IsStrict) {
-        routeNum |= 0x80;
-    }
-    data->buf[j++] = routeNum;
-
-    for (int i = 0; i < header->RouteNum; i++) {
-        UtzIAToBytes(header->IAList[i], data->buf + j);
-        j += UTZ_IA_LEN;
-    }
-
-    data->len = j;
-    return data;
+    data[0] = header->NextHead;
+    UtzIAToBytes(header->IA, data + 1);
+    return 5;
 }
 
 // UtzIsPayloadHeader 是否载荷头部
 bool UtzIsPayloadHeader(uint8_t head) {
-    return (head == UTZ_HEADER_FLP || head == UTZ_HEADER_WTS || head == UTZ_HEADER_DUP || head == UTZ_HEADER_SFTPA ||
-        head == UTZ_HEADER_SFTPB || head == UTZ_HEADER_STCP || head == UTZ_HEADER_ITCP || head == UTZ_HEADER_DAP ||
-        head == UTZ_HEADER_COMPRESS_COMPLEX || head == UTZ_HEADER_STANDARD_COMPLEX || head == UTZ_HEADER_GUAAP ||
-        head == UTZ_HEADER_SLP || head == UTZ_HEADER_DCOM || head == UTZ_HEADER_ISH);
+    return (head == UTZ_HEADER_CCP || head == UTZ_HEADER_RP || head == UTZ_HEADER_FLP || head == UTZ_HEADER_WTS || 
+        head == UTZ_HEADER_DUP || head == UTZ_HEADER_SFTPA || head == UTZ_HEADER_SFTPB || head == UTZ_HEADER_STCP || 
+        head == UTZ_HEADER_ITCP || head == UTZ_HEADER_DAP || head == UTZ_HEADER_COMPRESS_COMPLEX || 
+        head == UTZ_HEADER_STANDARD_COMPLEX || head == UTZ_HEADER_GUAAP || head == UTZ_HEADER_SLP || 
+        head == UTZ_HEADER_DCOM || head == UTZ_HEADER_ISH);
     }
 
 // UtzBytesToSimpleSecurityHeader 字节流转换为简单安全头部

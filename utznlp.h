@@ -1,5 +1,5 @@
-// Copyright 2021-2021 The jdh99 Authors. All rights reserved.
-// RFF 1：Network Layer Version 1(NLv1)
+// Copyright 2021-2022 The jdh99 Authors. All rights reserved.
+// RFF 1：Network Layer Protocol(NLP)设计
 // Authors: jdh99 <jdh821@163.com>
 
 #ifndef UTZ_NLV1_H
@@ -9,10 +9,10 @@
 #include <stdbool.h>
 
 // 协议版本
-#define UTZ_NLV1_VERSION_NAME "1.1"
+#define UTZ_NLP_VERSION_NAME "2.0"
 
 // 标准头部长度
-#define UTZ_NLV1_HEAD_LEN 22
+#define UTZ_NLP_HEAD_LEN 11
 
 // 特殊地址
 // 未指定地址
@@ -20,43 +20,25 @@
 // 回环地址
 #define UTZ_IA_LOOPBACK 0x1
 // 广播地址
-#define UTZ_IA_BROADCAST 0xFFFFFFFFFFFFFFFF
+#define UTZ_IA_BROADCAST 0xFFFFFFFF
 // 广播短地址
 #define UTZ_SHORT_IA_BROADCAST 0xFFFFFFFF
-// 协调器短地址
-#define UTZ_SHORT_IA_COORDINATOR 0x10
 
 // IA地址字节数
-#define UTZ_IA_LEN 8
-#define UTZ_SHORT_IA_LEN 4
-#define UTZ_TINY_IA_LEN 2
-
-// 无效跳数限制
-#define UTZ_HOPS_LIMIT_INVALID 255
-
-// 4字节短地址前缀
-#define UTZ_SHORT_IA_PREFIX 0xFE00000000000000
-// 2字节短地址前缀
-#define UTZ_TINY_IA_PREFIX 0xFE00000100000000
-// 4字节短地址掩码
-#define UTZ_SHORT_IA_MASK 0xFFFFFFFF
-// 2字节短地址掩码
-#define UTZ_TINY_IA_MASK 0xFFFF
+#define UTZ_IA_LEN 4
 
 // MTU
-#define UTZ_NLV1_MTU 1280
+#define UTZ_NLP_MTU 1280
 
 #pragma pack(1)
 
 // UtzStandardHeader 标准头部
 typedef struct {    
     uint8_t Version;
-    uint8_t FrameIndex;
     uint16_t PayloadLen;
     uint8_t NextHead;
-    uint8_t HopsLimit;
-    uint64_t SrcIA;
-    uint64_t DstIA;
+    uint32_t SrcIA;
+    uint32_t DstIA;
 } UtzStandardHeader;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 #pragma pack()
@@ -72,13 +54,13 @@ int UtzBytesToStandardHeader(uint8_t* data, int dataLen, UtzStandardHeader* head
 int UtzStandardHeaderToBytes(UtzStandardHeader* header, uint8_t* data, int dataSize);
 
 // UtzIsGlobalIA 是否是全球单播地址
-bool UtzIsGlobalIA(uint64_t ia);
+bool UtzIsGlobalIA(uint32_t ia);
 
 // UtzIsUniqueLocalIA 是否是唯一本地地址
-bool UtzIsUniqueLocalIA(uint64_t ia);
+bool UtzIsUniqueLocalIA(uint32_t ia);
 
-// UtzIsEthernetIA 是否是以太地址
-bool UtzIsEthernetIA(uint64_t ia);
+// IsMulticastIA 是否是组播地址
+bool UtzIsMulticastIA(uint32_t ia);
 
 // UtzGenerateFrameIndex 生成帧序号
 uint8_t UtzGenerateFrameIndex(void);

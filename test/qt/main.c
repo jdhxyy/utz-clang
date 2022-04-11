@@ -7,7 +7,10 @@
 static int mid = -1;
 
 static void case1(void);
+
 static void case2(void);
+static void printHex(uint8_t* data, int dataLen);
+
 static void case3(void);
 static void case4(void);
 static void case5(void);
@@ -29,9 +32,9 @@ int main() {
 }
 
 static void case1(void) {
-    uint8_t data1[] = {1, 2, 3, 4, 5, 6, 7, 8};
-    uint64_t ia = UtzBytesToIA(data1);
-    ScunitAssert(ia == 0x102030405060708, "1");
+    uint8_t data1[] = {1, 2, 3, 4};
+    uint32_t ia = UtzBytesToIA(data1);
+    ScunitAssert(ia == 0x1020304, "1");
 
     uint8_t data2[UTZ_IA_LEN] = {0};
     UtzIAToBytes(ia, data2);
@@ -42,67 +45,64 @@ static void case1(void) {
 
 static void case2(void) {
     UtzStandardHeader header1;
-    header1.Version = UTZ_NLV1_PROTOCOL_VERSION;
-    header1.FrameIndex = 5;
+    header1.Version = UTZ_NLP_PROTOCOL_VERSION;
     header1.PayloadLen = 6;
     header1.NextHead = 7;
-    header1.HopsLimit = 8;
-    header1.SrcIA = 0x1234567812345678;
-    header1.DstIA = 0x8765432187654321;
+    header1.SrcIA = 0x12345678;
+    header1.DstIA = 0x87654321;
 
     uint8_t data1[100] = {0};
     int num = UtzStandardHeaderToBytes(&header1, data1, 100);
-    ScunitAssert(num == UTZ_NLV1_HEAD_LEN, "1");
+    ScunitAssert(num == UTZ_NLP_HEAD_LEN, "1");
 
-    // 转换后字节流:01 05 00 06 07 08 12 34 56 78 12 34 56 78 87 65 43 21 87 65 43 21
-    uint8_t data2[] = {0x01, 0x05, 0x00, 0x06, 0x07, 0x08, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x87, 0x65, 0x43, 0x21, 0x87, 0x65, 0x43, 0x21};
+//    printHex(data1, num);
+
+    // 转换后字节流
+    uint8_t data2[] = {0x20, 0x06, 0x07, 0x12, 0x34, 0x56, 0x78, 0x87, 0x65, 0x43, 0x21};
     for (int i = 0; i < (int)sizeof(data2); i++) {
          ScunitAssert(data2[i] == data1[i], "2");
     }
 
     UtzStandardHeader header2;
     num = UtzBytesToStandardHeader(data1, (int)sizeof(data2), &header2);
-    ScunitAssert(num == UTZ_NLV1_HEAD_LEN, "3");
+    ScunitAssert(num == UTZ_NLP_HEAD_LEN, "3");
     ScunitAssert(header2.Version == header1.Version, "4");
-    ScunitAssert(header2.FrameIndex == header1.FrameIndex, "4");
     ScunitAssert(header2.PayloadLen == header1.PayloadLen, "4");
     ScunitAssert(header2.NextHead == header1.NextHead, "4");
-    ScunitAssert(header2.HopsLimit == header1.HopsLimit, "4");
     ScunitAssert(header2.SrcIA == header1.SrcIA, "4");
     ScunitAssert(header2.DstIA == header1.DstIA, "4");
 }
 
+static void printHex(uint8_t* data, int dataLen) {
+    for (int i = 0; i < dataLen; i++) {
+        printf("0x%02x, ", data[i]);
+    }
+    printf("\n");
+}
+
 static void case3(void) {
-    UtzRouteHeader* header1 = TZMalloc(mid, sizeof(UtzRouteHeader) + UTZ_IA_LEN * 3);
-    header1->NextHead = 2;
-    header1->RouteNum = 3;
-    header1->IsStrict = true;
-    header1->IAList[0] = 0x1234567812345677;
-    header1->IAList[1] = 0x1234567812345678;
-    header1->IAList[2] = 0x1234567812345679;
+    UtzRouteHeader header1;
+    header1.NextHead = 2;
+    header1.IA = 0x12345678;
 
-    TZBufferDynamic* data1 = UtzRouteHeaderToBytes(header1);
-    ScunitAssert(data1->len == 27, "1");
+    TZBuffer buffer;
+    buffer.len = UtzRouteHeaderToBytes(&header1, buffer.buf, TZ_BUFFER_LEN);
+    ScunitAssert(buffer.len == 5, "1");
 
-    // 转换后的字节流:02 19 83 12 34 56 78 12 34 56 77 12 34 56 78 12 34 56 78 12 34 56 78 12 34 56 79
-    uint8_t data2[] = {0x02, 0x19, 0x83, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x77, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x79};
+//    printHex(buffer.buf, buffer.len);
+
+    // 转换后的字节流
+    uint8_t data2[] = {0x02, 0x12, 0x34, 0x56, 0x78};
     for (int i = 0; i < (int)sizeof(data2); i++) {
-        ScunitAssert(data2[i] == data1->buf[i], "2");
+        ScunitAssert(data2[i] == buffer.buf[i], "2");
     }
 
-    int num = 0;
-    UtzRouteHeader* header2 = UtzBytesToRouteHeader(data1->buf, data1->len, &num);
-    ScunitAssert(num == 27, "3");
-    ScunitAssert(header2->NextHead == header1->NextHead, "4");
-    ScunitAssert(header2->RouteNum == header1->RouteNum, "4");
-    ScunitAssert(header2->IsStrict == header1->IsStrict, "4");
-    ScunitAssert(header2->IAList[0] == header1->IAList[0], "4");
-    ScunitAssert(header2->IAList[1] == header1->IAList[1], "4");
-    ScunitAssert(header2->IAList[2] == header1->IAList[2], "4");
+    UtzRouteHeader header2;
+    int offset = UtzBytesToRouteHeader(buffer.buf, buffer.len, &header2);
+    ScunitAssert(offset == 5, "2");
 
-    TZFree(header1);
-    TZFree(header2);
-    TZFree(data1);
+    ScunitAssert(header2.NextHead == header1.NextHead, "4");
+    ScunitAssert(header2.IA == header1.IA, "4");
 }
 
 static void case4(void) {
@@ -158,20 +158,17 @@ static void case5(void) {
 }
 
 static void case6(void) {
-    uint64_t ia = 0;
-    bool result = UtzIAStrToHex("2141::2", &ia);
-    ScunitAssert(result == true, "1");
-    ScunitAssert(ia == 0x2141000000000002, "1");
+    uint8_t data[] = {1, 2, 3, 4, 5};
+    TZBufferDynamic* frame1 = UtzBytesToCcpFrame(data, 5, true);
+    ScunitAssert(frame1->len == 7, "1");
 
-    result = UtzIAStrToHex("2141:0:0:2", &ia);
-    ScunitAssert(result == true, "2");
-    ScunitAssert(ia == 0x2141000000000002, "2");
+//    printHex(frame1->buf, frame1->len);
 
-    char str[32] = {0};
-    UtzIAHexToStr(0x2141000000000002, str, 0);
-    ScunitAssert(strcmp(str, "2141:0000:0000:0002") == 0, "3");
-    UtzIAHexToStr(0x2141000000000002, str, 1);
-    ScunitAssert(strcmp(str, "2141:0:0:2") == 0, "3");
-    UtzIAHexToStr(0x2141000000000002, str, 2);
-    ScunitAssert(strcmp(str, "2141::2") == 0, "3");
+    // 转换后的字节流
+    uint8_t frame2[] = {0x2a, 0xbb, 0x01, 0x02, 0x03, 0x04, 0x05};
+    for (int i = 0; i < (int)sizeof(frame2); i++) {
+        ScunitAssert(frame2[i] == frame1->buf[i], "2");
+    }
+
+    TZFree(frame1);
 }

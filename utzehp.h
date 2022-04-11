@@ -1,4 +1,4 @@
-// Copyright 2021-2021 The jdh99 Authors. All rights reserved.
+// Copyright 2021-2022 The jdh99 Authors. All rights reserved.
 // RFF 2：Extension Header Protocol(EHP)
 // Authors: jdh99 <jdh821@163.com>
 
@@ -8,11 +8,9 @@
 #include "tztype.h"
 
 // 版本
-#define UTZ_EHP_VERSION_NAME "1.1"
+#define UTZ_EHP_VERSION_NAME "1.2"
 
 // 扩展头部
-// 逐跳可选项头部
-#define UTZ_HEADER_HOP_BY_HOP_OPTIONS 0x0
 // 路由头部
 #define UTZ_HEADER_ROUTE 0x1
 // 分片头部
@@ -81,18 +79,20 @@
 #define UTZ_HEADER_DCOM 0x23
 // 物联网终端协议
 #define UTZ_HEADER_ISH 0x24
+// CRC16通信协议
+#define UTZ_HEADER_CCP 0x25
+// 原始数据通信协议
+#define UTZ_HEADER_RP 0x26
+// 自组网控制报文协议
+#define UTZ_HEADER_ADHOCCMP 0x27
 
 #pragma pack(1)
 
 // RouteHeader 路由头部结构
 typedef struct {    
     uint8_t NextHead;
-    // 剩余路由数
-    uint8_t RouteNum;
-    // 是否严格源路由
-    bool IsStrict;
-    // 路由地址列表
-    uint64_t IAList[];
+    // 路由地址
+    uint32_t IA;
 } UtzRouteHeader;
 
 // SimpleSecurityHeader 简单安全头部结构
@@ -104,14 +104,15 @@ typedef struct {
 
 #pragma pack()
 
-// UtzBytesToRouteHeader 字节流转换为路由头部
-// offset是转换后字节流新的偏移地址.如果为0表示转换失败.不需要知道可填写NULL
-// 返回头部指针,为NULL表示转换失败.转换成功要注意释放指针
-UtzRouteHeader* UtzBytesToRouteHeader(uint8_t* data, int dataLen, int* offset);
+// UtzBytesToRouteHeader 字节流转换为路由头部.字节流是大端
+// 字节流data必须大于路由头部长度
+// 返回头部以及头部字节数.头部为nil或者字节数为0表示转换失败
+int UtzBytesToRouteHeader(uint8_t* data, int dataLen, UtzRouteHeader* header);
 
-// UtzRouteHeaderToBytes 路由头部转换为字节流
-// 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
-TZBufferDynamic* UtzRouteHeaderToBytes(UtzRouteHeader* header);
+// UtzRouteHeader 路由头部转换为字节流
+// 字节流data必须大于路由头部长度
+// 返回值是转换后的字节流的长度.返回值是0表示转换失败
+int UtzRouteHeaderToBytes(UtzRouteHeader* header, uint8_t* data, int dataSize);
 
 // UtzIsPayloadHeader 是否载荷头部
 bool UtzIsPayloadHeader(uint8_t head);
