@@ -49,9 +49,9 @@ typedef struct {
     // 网络号
     uint32_t PanIA;
     // 中继源地址
-    uint32_t SrcRelayIA;
+    uint32_t SrcIA;
     // 中继目的地址
-    uint32_t DstRelayIA;
+    uint32_t DstIA;
     // 老化时间
     uint8_t AgingTime;
 } UtzAdhoccHeader;
