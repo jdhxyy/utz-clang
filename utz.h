@@ -6,7 +6,7 @@
 #define UTZ_H
 
 // 协议族版本号
-#define UTZ_NLP_PROTOCOL_VERSION 2
+#define UTZ_NLP_VERSION 2
 
 #include "utzcommon.h"
 #include "utznlp.h"
