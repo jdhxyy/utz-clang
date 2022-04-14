@@ -9,10 +9,18 @@
 #include "utzcommon.h"
 
 // 版本
-#define UTZ_ADHOCCCMP_VERSION_NAME "1.2"
+#define UTZ_ADHOCCMP_VERSION_NAME "1.2"
 
 // 自组网控制头部长度
 #define HEADER_ADHOCC_LEN 15
+
+// 命令
+// 信标
+#define UTZ_ADHOCCMP_BEACON 0x10
+// 应答
+#define UTZ_ADHOCCMP_ACK 0x11
+// 请求推送
+#define UTZ_ADHOCCMP_REQUIRE_PUSH 0x12
 
 #pragma pack(1)
 
@@ -47,6 +55,29 @@ typedef struct {
     // 老化时间
     uint8_t AgingTime;
 } UtzAdhoccHeader;
+
+// 通信结构体定义
+// UtzAdhoccmpBeacon 信标
+typedef struct {
+    // 父节点地址
+    uint32_t ParentIA;
+    // 多跳数
+    uint8_t Hops;
+} UtzAdhoccmpBeacon;
+
+// UtzAdhoccmpAck 应答
+typedef struct {
+    // 发送帧种的帧序号
+    uint8_t Index;
+} UtzAdhoccmpAck;
+
+// UtzAdhoccmpRequirePush 请求推送
+typedef struct {
+    // 上次推送序号
+    uint8_t LastPushIndex;
+    // 上次推送源地址
+    uint32_t LastPushSrcIA;
+} UtzAdhoccmpRequirePush;
 
 #pragma pack()
 
