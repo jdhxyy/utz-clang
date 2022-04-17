@@ -62,7 +62,4 @@ bool UtzIsUniqueLocalIA(uint32_t ia);
 // IsMulticastIA 是否是组播地址
 bool UtzIsMulticastIA(uint32_t ia);
 
-// UtzGenerateFrameIndex 生成帧序号
-uint8_t UtzGenerateFrameIndex(void);
-
 #endif
