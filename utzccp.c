@@ -65,3 +65,20 @@ TZBufferDynamic* UtzCcpFrameToBytes(uint8_t* frame, int frameLen) {
     memcpy(data->buf, frame + 2, (uint64_t)(data->len));
     return data;
 }
+
+// UtzCcpFrameIsValid CCP帧是否有效
+bool UtzCcpFrameIsValid(uint8_t* frame, int frameLen) {
+    if (frameLen < 2) {
+        return false;
+    }
+
+    uint16_t crcGet = (uint16_t)((frame[0] << 8) + frame[1]);
+    if (crcGet != 0) {
+        // 有CRC
+        uint16_t crcCalc = Crc16Checksum(frame + 2, frameLen - 2);
+        if (crcGet != crcCalc) {
+            return false;
+        }
+    }
+    return true;
+}

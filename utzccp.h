@@ -21,4 +21,7 @@ TZBufferDynamic* UtzBytesToCcpFrame(uint8_t* data, int dataLen, bool isNeedCrc);
 // 返回字节流.如果是NULL表示转换失败.转换成功要注意释放指针
 TZBufferDynamic* UtzCcpFrameToBytes(uint8_t* frame, int frameLen);
 
+// UtzCcpFrameIsValid CCP帧是否有效
+bool UtzCcpFrameIsValid(uint8_t* frame, int frameLen);
+
 #endif

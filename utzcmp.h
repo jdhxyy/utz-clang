@@ -15,6 +15,10 @@
 #define UTZ_CMP_APPLY_SLAVE 0x25
 // 连接父路由
 #define UTZ_CMP_CONNECT_PARENT 0x26
+// 读取在线状态
+#define UTZ_CMP_READ_ONLINE_STATE 0x3B
+// 推送在线状态
+#define UTZ_CMP_PUSH_ONLINE_STATE 0x3C
 
 #pragma pack(1)
 
@@ -66,6 +70,22 @@ typedef struct {
 #define UTZ_CMP_CONNECT_PARENT_RESULT_NOT_ROUTER 0x2
 // 失败,无权限连接
 #define UTZ_CMP_CONNECT_PARENT_RESULT_NO_PERSSION 0x3
+
+// UtzCmpReadOnlineState 读取在线状态应答
+typedef struct {
+    // 在线状态.0：掉线。1：在线
+    uint8_t IsOnline;
+    // 父路由全球单播地址
+    uint32_t IA;
+} UtzCmpAckReadOnlineState;
+
+// 推送在线状态请求
+typedef struct {
+    // 在线状态.0：掉线。1：在线
+    uint8_t IsOnline;
+    // 父路由全球单播地址
+    uint32_t IA;
+} UtzCmpReqPushOnlineState;
 
 #pragma pack()
 

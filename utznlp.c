@@ -4,6 +4,7 @@
 
 #include "utznlp.h"
 #include "utzcommon.h"
+#include "utz.h"
 
 // UtzBytesToStandardHeader 字节流转换为标准头部.字节流是大端
 // 字节流data必须大于标准头部长度
@@ -44,6 +45,11 @@ int UtzStandardHeaderToBytes(UtzStandardHeader* header, uint8_t* data, int dataS
     UtzMemcpyReverse(data + j, (uint8_t *)&(header->DstIA), UTZ_IA_LEN);
     j += UTZ_IA_LEN;
     return j;
+}
+
+// UtzConvertPayloadLenMember 载荷长度转换成标准头部中的载荷长度成员
+uint16_t UtzConvertPayloadLenMember(uint16_t payloadLen) {
+    return (UTZ_NLP_VERSION << 12) + payloadLen;
 }
 
 // UtzIsGlobalIA 是否是全球单播地址
