@@ -71,3 +71,18 @@ bool UtzIsUniqueLocalIA(uint32_t ia) {
 bool UtzIsMulticastIA(uint32_t ia) {
     return ((ia >> 16) & 0xffff) == 0xffff;
 }
+
+// UtzIsAckCmd 是否应答命令
+bool UtzIsAckCmd(uint8_t cmd) {
+    return (cmd & 0x80) != 0;
+}
+
+// UtzGetAckCmd 得到应答命令字
+uint8_t UtzGetAckCmd(uint8_t cmd) {
+    return cmd | 0x80;
+}
+
+// UtzGetReqCmd 得到请求命令字
+uint8_t UtzGetReqCmd(uint8_t cmd) {
+    return cmd & 0x7f;
+}

@@ -65,4 +65,13 @@ bool UtzIsUniqueLocalIA(uint32_t ia);
 // IsMulticastIA 是否是组播地址
 bool UtzIsMulticastIA(uint32_t ia);
 
+// UtzIsAckCmd 是否应答命令
+bool UtzIsAckCmd(uint8_t cmd);
+
+// UtzGetAckCmd 得到应答命令字
+uint8_t UtzGetAckCmd(uint8_t cmd);
+
+// UtzGetReqCmd 得到请求命令字
+uint8_t UtzGetReqCmd(uint8_t cmd);
+
 #endif
