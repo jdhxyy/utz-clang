@@ -12,13 +12,11 @@
 #include <string.h>
 
 // UtzBytesToCcpFrame 字节流转换为CCP帧
-// 返回值CCP帧.如果是NULL表示转换失败.转换成功要注意释放指针
-TZBufferDynamic* UtzBytesToCcpFrame(uint8_t* data, int dataLen, bool isNeedCrc) {
-    int frameSize = (int)sizeof(TZBufferDynamic) + dataLen + 2;
-    TZBufferDynamic* frame = (TZBufferDynamic*)TZMalloc(UtzGetMid(), frameSize);
-    if (frame == NULL) {
-        LE(UTZ_TAG, "bytes to ccp frame failed!malloc failed!");
-        return NULL;
+// 字节流dst必须大于等于srcLen+2
+// 返回值是转换后的字节流的长度.返回值是0表示转换失败
+int UtzBytesToCcpFrame(uint8_t* src, int srcLen, bool isNeedCrc, uint8_t* dst, int dstSize) {
+    if (dstSize < srcLen + 2) {
+        return 0;
     }
 
     int j = 0;
@@ -26,16 +24,15 @@ TZBufferDynamic* UtzBytesToCcpFrame(uint8_t* data, int dataLen, bool isNeedCrc) 
     // CRC校验
     uint16_t crc = 0;
     if (isNeedCrc) {
-        crc = Crc16Checksum(data, dataLen);
+        crc = Crc16Checksum(src, srcLen);
     }
-    frame->buf[j++] = (uint8_t)(crc >> 8);
-    frame->buf[j++] = (uint8_t)(crc);
+    dst[j++] = (uint8_t)(crc >> 8);
+    dst[j++] = (uint8_t)(crc);
     // 正文
-    memcpy(frame->buf + j, data, (uint64_t)dataLen);
-    j += dataLen;
+    memcpy(dst + j, src, (uint64_t)srcLen);
+    j += srcLen;
 
-    frame->len = j;
-    return frame;
+    return j;
 }
 
 // UtzCcpFrameToBytes CCP帧转换为字节流.字节流是CCP帧的数据正文

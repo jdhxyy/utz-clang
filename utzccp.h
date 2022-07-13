@@ -14,8 +14,9 @@
 #define UTZ_FLP_SUFFIX_LEN_MAX 0x7FF
 
 // UtzBytesToCcpFrame 字节流转换为CCP帧
-// 返回值CCP帧.如果是NULL表示转换失败.转换成功要注意释放指针
-TZBufferDynamic* UtzBytesToCcpFrame(uint8_t* data, int dataLen, bool isNeedCrc);
+// 字节流dst必须大于等于srcLen+2
+// 返回值是转换后的字节流的长度.返回值是0表示转换失败
+int UtzBytesToCcpFrame(uint8_t* src, int srcLen, bool isNeedCrc, uint8_t* dst, int dstSize);
 
 // UtzCcpFrameToBytes CCP帧转换为字节流.字节流是CCP帧的数据正文
 // 返回字节流.如果是NULL表示转换失败.转换成功要注意释放指针
