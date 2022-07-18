@@ -97,10 +97,28 @@ typedef struct {
 
 // SimpleSecurityHeader 简单安全头部结构
 typedef struct {
-	uint8_t NextHead;
+    uint8_t NextHead;
     uint8_t PwdLen;
     uint8_t Pwd[];
 } UtzSimpleSecurityHeader;
+
+typedef union {
+    struct {
+        // 偏移量
+        uint16_t Offset:15;
+        // 最后一片标识
+        uint16_t IsLastPiece:1;
+    } bit;
+    uint16_t value;
+} UtzFragmentOffset;
+
+// UtzFragmentHeader 分片头部
+typedef struct {    
+    // 标识符
+    uint16_t Flag;
+    // 分片偏移量
+    UtzFragmentOffset Offset;
+} UtzFragmentHeader;
 
 #pragma pack()
 

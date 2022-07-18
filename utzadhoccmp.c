@@ -18,9 +18,9 @@ int UtzBytesToAdhoccHeader(uint8_t* data, int dataLen, UtzAdhoccHeader* header) 
     header->ControlWord.value = data[j++];
     header->PanIA = UtzBytesToIA(data + j);
     j += 4;
-    header->SrcRelayIA = UtzBytesToIA(data + j);
+    header->SrcIA = UtzBytesToIA(data + j);
     j += 4;
-    header->DstRelayIA = UtzBytesToIA(data + j);
+    header->DstIA = UtzBytesToIA(data + j);
     j += 4;
     header->AgingTime = data[j++];
     return j;
@@ -35,9 +35,14 @@ int UtzAdhoccHeaderToBytes(UtzAdhoccHeader* header, uint8_t* data, int dataSize)
 
     int j = 0;
     data[j++] = header->NextHead;
-    UtzMemcpyReverse(data + j, (uint8_t*)&(header->PanIA), UTZ_IA_LEN); j += UTZ_IA_LEN;
-    UtzMemcpyReverse(data + j, (uint8_t*)&(header->SrcRelayIA), UTZ_IA_LEN); j += UTZ_IA_LEN;
-    UtzMemcpyReverse(data + j, (uint8_t*)&(header->DstRelayIA), UTZ_IA_LEN); j += UTZ_IA_LEN;
+    data[j++] = header->ControlWord.value;
+    UtzMemcpyReverse(data + j, (uint8_t*)&(header->PanIA), UTZ_IA_LEN);
+    j += UTZ_IA_LEN;
+    UtzMemcpyReverse(data + j, (uint8_t*)&(header->SrcIA), UTZ_IA_LEN);
+    j += UTZ_IA_LEN;
+    UtzMemcpyReverse(data + j, (uint8_t*)&(header->DstIA), UTZ_IA_LEN);
+    j += UTZ_IA_LEN;
+    data[j++] = header->AgingTime;
     return j;
 }
 

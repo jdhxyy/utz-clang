@@ -53,6 +53,9 @@ int UtzBytesToStandardHeader(uint8_t* data, int dataLen, UtzStandardHeader* head
 // 返回值是转换后的字节流的长度.返回值是0表示转换失败
 int UtzStandardHeaderToBytes(UtzStandardHeader* header, uint8_t* data, int dataSize);
 
+// UtzConvertPayloadLenMember 载荷长度转换成标准头部中的载荷长度成员
+uint16_t UtzConvertPayloadLenMember(uint16_t payloadLen);
+
 // UtzIsGlobalIA 是否是全球单播地址
 bool UtzIsGlobalIA(uint32_t ia);
 
@@ -61,5 +64,14 @@ bool UtzIsUniqueLocalIA(uint32_t ia);
 
 // IsMulticastIA 是否是组播地址
 bool UtzIsMulticastIA(uint32_t ia);
+
+// UtzIsAckCmd 是否应答命令
+bool UtzIsAckCmd(uint8_t cmd);
+
+// UtzGetAckCmd 得到应答命令字
+uint8_t UtzGetAckCmd(uint8_t cmd);
+
+// UtzGetReqCmd 得到请求命令字
+uint8_t UtzGetReqCmd(uint8_t cmd);
 
 #endif

@@ -4,6 +4,7 @@
 
 #include "utznlp.h"
 #include "utzcommon.h"
+#include "utz.h"
 
 // UtzBytesToStandardHeader 字节流转换为标准头部.字节流是大端
 // 字节流data必须大于标准头部长度
@@ -46,6 +47,11 @@ int UtzStandardHeaderToBytes(UtzStandardHeader* header, uint8_t* data, int dataS
     return j;
 }
 
+// UtzConvertPayloadLenMember 载荷长度转换成标准头部中的载荷长度成员
+uint16_t UtzConvertPayloadLenMember(uint16_t payloadLen) {
+    return (UTZ_NLP_VERSION << 12) + payloadLen;
+}
+
 // UtzIsGlobalIA 是否是全球单播地址
 bool UtzIsGlobalIA(uint32_t ia) {
     return ((ia >> 30) & 0x3) == 0x1;
@@ -64,4 +70,19 @@ bool UtzIsUniqueLocalIA(uint32_t ia) {
 // IsMulticastIA 是否是组播地址
 bool UtzIsMulticastIA(uint32_t ia) {
     return ((ia >> 16) & 0xffff) == 0xffff;
+}
+
+// UtzIsAckCmd 是否应答命令
+bool UtzIsAckCmd(uint8_t cmd) {
+    return (cmd & 0x80) != 0;
+}
+
+// UtzGetAckCmd 得到应答命令字
+uint8_t UtzGetAckCmd(uint8_t cmd) {
+    return cmd | 0x80;
+}
+
+// UtzGetReqCmd 得到请求命令字
+uint8_t UtzGetReqCmd(uint8_t cmd) {
+    return cmd & 0x7f;
 }
