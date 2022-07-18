@@ -7,7 +7,7 @@
 
 // UtzBytesToStandardHeader 字节流转换为标准头部.字节流是大端
 // 字节流data必须大于标准头部长度
-// 返回头部以及头部字节数.头部为nil或者字节数为0表示转换失败
+// 返回头部以及头部字节数.字节数为0表示转换失败
 int UtzBytesToStandardHeader(uint8_t* data, int dataLen, UtzStandardHeader* header) {
     if (dataLen < UTZ_NLP_HEAD_LEN) {
         return 0;

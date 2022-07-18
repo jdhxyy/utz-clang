@@ -82,7 +82,7 @@ typedef struct {
 #pragma pack()
 
 // UtzBytesToAdhoccHeader 字节流转换为自组网控制头部
-// 返回头部以及头部字节数.头部为nil或者字节数为0表示转换失败
+// 返回头部以及头部字节数.字节数为0表示转换失败
 int UtzBytesToAdhoccHeader(uint8_t* data, int dataLen, UtzAdhoccHeader* header);
 
 // UtzADHOCCHeaderToBytes 自组网控制头部转换为字节流.转换后存储于bytes中
