@@ -37,8 +37,8 @@ typedef union {
         bool IsContinueSend:1;
         // 应答式发送控制位
         bool IsAckSend:1;
-    } bit;
-    uint8_t value;
+    } Bit;
+    uint8_t Value;
 } UtzAdhoccHeaderControlWord;
 
 // UtzAdhoccHeader 自组网控制头部结构

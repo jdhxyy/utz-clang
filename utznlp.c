@@ -15,8 +15,7 @@ int UtzBytesToStandardHeader(uint8_t* data, int dataLen, UtzStandardHeader* head
     }
 
     int j = 0;
-    header->Version = (data[j] >> 4) & 0xf;
-    header->PayloadLen = ((uint16_t)((data[j] << 8) + data[j + 1])) & 0xfff;
+    header->PayloadLen.Value = (data[j] << 8) + data[j + 1];
     j += 2;
     header->NextHead = data[j++];
     header->SrcIA = UtzBytesToIA(data + j);
@@ -35,9 +34,8 @@ int UtzStandardHeaderToBytes(UtzStandardHeader* header, uint8_t* data, int dataS
     }
 
     int j = 0;
-    uint16_t value = (header->Version << 12) + header->PayloadLen;
-    data[j++] = value >> 8;
-    data[j++] = value;
+    data[j++] = header->PayloadLen.Value >> 8;
+    data[j++] = header->PayloadLen.Value;
     data[j++] = header->NextHead;
 
     UtzMemcpyReverse(data + j, (uint8_t *)&(header->SrcIA), UTZ_IA_LEN);

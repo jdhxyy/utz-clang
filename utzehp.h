@@ -108,8 +108,8 @@ typedef union {
         uint16_t Offset:15;
         // 最后一片标识
         uint16_t IsLastPiece:1;
-    } bit;
-    uint16_t value;
+    } Bit;
+    uint16_t Value;
 } UtzFragmentOffset;
 
 // UtzFragmentHeader 分片头部

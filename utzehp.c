@@ -117,7 +117,7 @@ int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataS
     data[j++] = header->Head;
     data[j++] = header->Flag >> 8;
     data[j++] = header->Flag;
-    data[j++] = header->Offset.value >> 8;
-    data[j++] = header->Offset.value;
+    data[j++] = header->Offset.Value >> 8;
+    data[j++] = header->Offset.Value;
     return j;
 }

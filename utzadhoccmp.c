@@ -15,7 +15,7 @@ int UtzBytesToAdhoccHeader(uint8_t* data, int dataLen, UtzAdhoccHeader* header) 
 
     int j = 0;
     header->NextHead = data[j++];
-    header->ControlWord.value = data[j++];
+    header->ControlWord.Value = data[j++];
     header->PanIA = UtzBytesToIA(data + j);
     j += 4;
     header->SrcIA = UtzBytesToIA(data + j);
@@ -35,7 +35,7 @@ int UtzAdhoccHeaderToBytes(UtzAdhoccHeader* header, uint8_t* data, int dataSize)
 
     int j = 0;
     data[j++] = header->NextHead;
-    data[j++] = header->ControlWord.value;
+    data[j++] = header->ControlWord.Value;
     UtzMemcpyReverse(data + j, (uint8_t*)&(header->PanIA), UTZ_IA_LEN);
     j += UTZ_IA_LEN;
     UtzMemcpyReverse(data + j, (uint8_t*)&(header->SrcIA), UTZ_IA_LEN);

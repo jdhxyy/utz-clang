@@ -32,10 +32,19 @@
 
 #pragma pack(1)
 
+typedef union {
+    struct {
+        // 偏移量
+        uint16_t Len:12;
+        // 最后一片标识
+        uint16_t Version:4;
+    } Bit;
+    uint16_t Value;
+} UtzStandardHeaderPayloadLen;
+
 // UtzStandardHeader 标准头部
 typedef struct {    
-    uint8_t Version;
-    uint16_t PayloadLen;
+    UtzStandardHeaderPayloadLen PayloadLen;
     uint8_t NextHead;
     uint32_t SrcIA;
     uint32_t DstIA;
