@@ -154,4 +154,8 @@ TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd)
 // 返回值是转换后的字节流的长度.返回值是0表示转换失败
 int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataSize);
 
+// UtzBytesToFragmentHeader 字节流转换为分片头部.字节流是大端
+// 返回头部以及头部字节数.字节数为0表示转换失败
+int UtzBytesToFragmentHeader(uint8_t* data, int dataLen, UtzFragmentHeader* header);
+
 #endif

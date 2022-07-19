@@ -121,3 +121,19 @@ int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataS
     data[j++] = header->Offset.Value;
     return j;
 }
+
+// UtzBytesToFragmentHeader 字节流转换为分片头部.字节流是大端
+// 返回头部以及头部字节数.字节数为0表示转换失败
+int UtzBytesToFragmentHeader(uint8_t* data, int dataLen, UtzFragmentHeader* header) {
+    if (dataLen < sizeof(UtzFragmentHeader)) {
+        return 0;
+    }
+
+    int j = 0;
+    header->Head = data[j++];
+    header->Flag = (data[j] << 8) + data[j + 1];
+    j += 2;
+    header->Offset.Value = (data[j] << 8) + data[j + 1];
+    j += 2;
+    return j;
+}
