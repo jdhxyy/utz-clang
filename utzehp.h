@@ -113,7 +113,9 @@ typedef union {
 } UtzFragmentOffset;
 
 // UtzFragmentHeader 分片头部
-typedef struct {    
+typedef struct {
+    // 数据头部
+    uint8_t Head;
     // 标识符
     uint16_t Flag;
     // 分片偏移量
@@ -147,5 +149,9 @@ TZBufferDynamic* UtzSimpleSecurityHeaderToBytes(UtzSimpleSecurityHeader* header)
 // UtzSimpleSecurityHeaderDataToBytes 简单安全头部数据转换为字节流
 // 返回的是字节流.如果是NULL表示转换失败.转换成功要注意释放指针
 TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd);
+
+// UtzFragmentHeaderToBytes 分片头部转换为字节流
+// 返回值是转换后的字节流的长度.返回值是0表示转换失败
+int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataSize);
 
 #endif

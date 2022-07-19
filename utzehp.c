@@ -105,3 +105,19 @@ TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd)
     data->len = j;
     return data;
 }
+
+// UtzFragmentHeaderToBytes 分片头部转换为字节流
+// 返回值是转换后的字节流的长度.返回值是0表示转换失败
+int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataSize) {
+    if (dataSize < sizeof(UtzFragmentHeader)) {
+        return 0;
+    }
+
+    int j = 0;
+    data[j++] = header->Head;
+    data[j++] = header->Flag >> 8;
+    data[j++] = header->Flag;
+    data[j++] = header->Offset.value >> 8;
+    data[j++] = header->Offset.value;
+    return j;
+}
