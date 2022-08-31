@@ -1,5 +1,5 @@
 // Copyright 2022-2022 The jdh99 Authors. All rights reserved.
-// CCP£ºCRC16 CheckSum Protocol
+// CCPï¼šCRC16 CheckSum Protocol
 // Authors: jdh99 <jdh821@163.com>
 
 #ifndef UTZ_CCP_H
@@ -7,22 +7,22 @@
 
 #include "tztype.h"
 
-// °æ±¾
+// ç‰ˆæœ¬
 #define UTZ_CCP_VERSION_NAME "1.0"
 
-// ×î´óÎ²×º³¤¶È
+// æœ€å¤§å°¾ç¼€é•¿åº¦
 #define UTZ_FLP_SUFFIX_LEN_MAX 0x7FF
 
-// UtzBytesToCcpFrame ×Ö½ÚÁ÷×ª»»ÎªCCPÖ¡
-// ×Ö½ÚÁ÷dst±ØĞë´óÓÚµÈÓÚsrcLen+2
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToCcpFrame å­—èŠ‚æµè½¬æ¢ä¸ºCCPå¸§
+// å­—èŠ‚æµdstå¿…é¡»å¤§äºç­‰äºsrcLen+2
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToCcpFrame(uint8_t* src, int srcLen, bool isNeedCrc, uint8_t* dst, int dstSize);
 
-// UtzCcpFrameToBytes CCPÖ¡×ª»»Îª×Ö½ÚÁ÷.×Ö½ÚÁ÷ÊÇCCPÖ¡µÄÊı¾İÕıÎÄ
-// ·µ»Ø×Ö½ÚÁ÷.Èç¹ûÊÇNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// UtzCcpFrameToBytes CCPå¸§è½¬æ¢ä¸ºå­—èŠ‚æµ.å­—èŠ‚æµæ˜¯CCPå¸§çš„æ•°æ®æ­£æ–‡
+// è¿”å›å­—èŠ‚æµ.å¦‚æœæ˜¯NULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 TZBufferDynamic* UtzCcpFrameToBytes(uint8_t* frame, int frameLen);
 
-// UtzCcpFrameIsValid CCPÖ¡ÊÇ·ñÓĞĞ§
+// UtzCcpFrameIsValid CCPå¸§æ˜¯å¦æœ‰æ•ˆ
 bool UtzCcpFrameIsValid(uint8_t* frame, int frameLen);
 
 #endif

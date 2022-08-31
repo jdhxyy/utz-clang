@@ -1,5 +1,5 @@
 // Copyright 2022-2022 The jdh99 Authors. All rights reserved.
-// CCP£ºCRC16 CheckSum Protocol
+// CCPï¼šCRC16 CheckSum Protocol
 // Authors: jdh99 <jdh821@163.com>
 
 #include "utzccp.h"
@@ -11,9 +11,9 @@
 
 #include <string.h>
 
-// UtzBytesToCcpFrame ×Ö½ÚÁ÷×ª»»ÎªCCPÖ¡
-// ×Ö½ÚÁ÷dst±ØĞë´óÓÚµÈÓÚsrcLen+2
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToCcpFrame å­—èŠ‚æµè½¬æ¢ä¸ºCCPå¸§
+// å­—èŠ‚æµdstå¿…é¡»å¤§äºç­‰äºsrcLen+2
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToCcpFrame(uint8_t* src, int srcLen, bool isNeedCrc, uint8_t* dst, int dstSize) {
     if (dstSize < srcLen + 2) {
         return 0;
@@ -21,22 +21,22 @@ int UtzBytesToCcpFrame(uint8_t* src, int srcLen, bool isNeedCrc, uint8_t* dst, i
 
     int j = 0;
 
-    // CRCĞ£Ñé
+    // CRCæ ¡éªŒ
     uint16_t crc = 0;
     if (isNeedCrc) {
         crc = Crc16Checksum(src, srcLen);
     }
     dst[j++] = (uint8_t)(crc >> 8);
     dst[j++] = (uint8_t)(crc);
-    // ÕıÎÄ
+    // æ­£æ–‡
     memcpy(dst + j, src, (uint64_t)srcLen);
     j += srcLen;
 
     return j;
 }
 
-// UtzCcpFrameToBytes CCPÖ¡×ª»»Îª×Ö½ÚÁ÷.×Ö½ÚÁ÷ÊÇCCPÖ¡µÄÊı¾İÕıÎÄ
-// ·µ»Ø×Ö½ÚÁ÷.Èç¹ûÊÇNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// UtzCcpFrameToBytes CCPå¸§è½¬æ¢ä¸ºå­—èŠ‚æµ.å­—èŠ‚æµæ˜¯CCPå¸§çš„æ•°æ®æ­£æ–‡
+// è¿”å›å­—èŠ‚æµ.å¦‚æœæ˜¯NULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 TZBufferDynamic* UtzCcpFrameToBytes(uint8_t* frame, int frameLen) {
     if (frameLen < 2) {
         return NULL;
@@ -44,7 +44,7 @@ TZBufferDynamic* UtzCcpFrameToBytes(uint8_t* frame, int frameLen) {
 
     uint16_t crcGet = (uint16_t)((frame[0] << 8) + frame[1]);
     if (crcGet != 0) {
-        // ÓĞCRC
+        // æœ‰CRC
         uint16_t crcCalc = Crc16Checksum(frame + 2, frameLen - 2);
         if (crcGet != crcCalc) {
             LE(UTZ_TAG, "ccp frame to bytes failed!crc calc failed:0x%x 0x%x", crcCalc, crcGet);
@@ -63,7 +63,7 @@ TZBufferDynamic* UtzCcpFrameToBytes(uint8_t* frame, int frameLen) {
     return data;
 }
 
-// UtzCcpFrameIsValid CCPÖ¡ÊÇ·ñÓĞĞ§
+// UtzCcpFrameIsValid CCPå¸§æ˜¯å¦æœ‰æ•ˆ
 bool UtzCcpFrameIsValid(uint8_t* frame, int frameLen) {
     if (frameLen < 2) {
         return false;
@@ -71,7 +71,7 @@ bool UtzCcpFrameIsValid(uint8_t* frame, int frameLen) {
 
     uint16_t crcGet = (uint16_t)((frame[0] << 8) + frame[1]);
     if (crcGet != 0) {
-        // ÓĞCRC
+        // æœ‰CRC
         uint16_t crcCalc = Crc16Checksum(frame + 2, frameLen - 2);
         if (crcGet != crcCalc) {
             return false;

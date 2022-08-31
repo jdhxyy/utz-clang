@@ -1,101 +1,103 @@
 // Copyright 2021-2022 The jdh99 Authors. All rights reserved.
-// RFF 1£ºNetwork Layer Protocol(NLP)Éè¼Æ
+// RFF 1ï¼šNetwork Layer Protocol(NLP)è®¾è®¡
 // Authors: jdh99 <jdh821@163.com>
 
 #include "utznlp.h"
 #include "utzcommon.h"
 #include "utz.h"
 
-// UtzBytesToStandardHeader ×Ö½ÚÁ÷×ª»»Îª±ê×¼Í·²¿.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ×Ö½ÚÁ÷data±ØĞë´óÓÚ±ê×¼Í·²¿³¤¶È
-// ·µ»ØÍ·²¿ÒÔ¼°Í·²¿×Ö½ÚÊı.×Ö½ÚÊıÎª0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToStandardHeader å­—èŠ‚æµè½¬æ¢ä¸ºæ ‡å‡†å¤´éƒ¨.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// å­—èŠ‚æµdataå¿…é¡»å¤§äºæ ‡å‡†å¤´éƒ¨é•¿åº¦
+// è¿”å›å¤´éƒ¨ä»¥åŠå¤´éƒ¨å­—èŠ‚æ•°.å­—èŠ‚æ•°ä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToStandardHeader(uint8_t* data, int dataLen, UtzStandardHeader* header) {
     if (dataLen < UTZ_NLP_HEAD_LEN) {
         return 0;
     }
 
     int j = 0;
-    header->PayloadLen.Value = (data[j] << 8) + data[j + 1];
-    j += 2;
-    header->NextHead = data[j++];
     header->SrcIA = UtzBytesToIA(data + j);
     j += UTZ_IA_LEN;
     header->DstIA = UtzBytesToIA(data + j);
     j += UTZ_IA_LEN;
+    header->FrameIndex = data[j++];
+    header->NextHead = data[j++];
+    header->PayloadLen.Value = (data[j] << 8) + data[j + 1];
+    j += 2;
     return j;
 }
 
-// UtzStandardHeaderToBytes ±ê×¼Í·²¿×ª»»Îª×Ö½ÚÁ÷.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ×Ö½ÚÁ÷data±ØĞë´óÓÚ±ê×¼Í·²¿³¤¶È
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzStandardHeaderToBytes æ ‡å‡†å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// å­—èŠ‚æµdataå¿…é¡»å¤§äºæ ‡å‡†å¤´éƒ¨é•¿åº¦
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzStandardHeaderToBytes(UtzStandardHeader* header, uint8_t* data, int dataSize) {
     if (dataSize < UTZ_NLP_HEAD_LEN) {
         return 0;
     }
 
     int j = 0;
-    data[j++] = header->PayloadLen.Value >> 8;
-    data[j++] = header->PayloadLen.Value;
-    data[j++] = header->NextHead;
-
     UtzMemcpyReverse(data + j, (uint8_t *)&(header->SrcIA), UTZ_IA_LEN);
     j += UTZ_IA_LEN;
     UtzMemcpyReverse(data + j, (uint8_t *)&(header->DstIA), UTZ_IA_LEN);
     j += UTZ_IA_LEN;
+    data[j++] = header->FrameIndex;
+    data[j++] = header->NextHead;
+    data[j++] = header->PayloadLen.Value >> 8;
+    data[j++] = header->PayloadLen.Value;
     return j;
 }
 
-// UtzConvertPayloadLenMember ÔØºÉ³¤¶È×ª»»³É±ê×¼Í·²¿ÖĞµÄÔØºÉ³¤¶È³ÉÔ±
-uint16_t UtzConvertPayloadLenMember(uint16_t payloadLen) {
-    return (UTZ_NLP_VERSION << 12) + payloadLen;
-}
-
-// UtzIsGlobalIA ÊÇ·ñÊÇÈ«Çòµ¥²¥µØÖ·
+// UtzIsGlobalIA æ˜¯å¦æ˜¯å…¨çƒå•æ’­åœ°å€
 bool UtzIsGlobalIA(uint32_t ia) {
     return ((ia >> 30) & 0x3) == 0x1;
 }
 
-// IsConstantIA ÊÇ·ñÊÇ¹Ì¶¨µ¥²¥µØÖ·
+// IsConstantIA æ˜¯å¦æ˜¯å›ºå®šå•æ’­åœ°å€
 bool UtzIsConstantIA(uint32_t ia) {
     return ((ia >> 30) & 0x3) == 0x2;
 }
 
-// UtzIsUniqueLocalIA ÊÇ·ñÊÇÎ¨Ò»±¾µØµØÖ·
+// UtzIsUniqueLocalIA æ˜¯å¦æ˜¯å”¯ä¸€æœ¬åœ°åœ°å€
 bool UtzIsUniqueLocalIA(uint32_t ia) {
     return ((ia >> 16) & 0xffff) == 0xfffe;
 }
 
-// IsMulticastIA ÊÇ·ñÊÇ×é²¥µØÖ·
+// IsMulticastIA æ˜¯å¦æ˜¯ç»„æ’­åœ°å€
 bool UtzIsMulticastIA(uint32_t ia) {
     return ((ia >> 16) & 0xffff) == 0xffff;
 }
 
-// UtzIsAckCmd ÊÇ·ñÓ¦´ğÃüÁî
+// UtzIsAckCmd æ˜¯å¦åº”ç­”å‘½ä»¤
 bool UtzIsAckCmd(uint8_t cmd) {
     return (cmd & 0x80) != 0;
 }
 
-// UtzGetAckCmd µÃµ½Ó¦´ğÃüÁî×Ö
+// UtzGetAckCmd å¾—åˆ°åº”ç­”å‘½ä»¤å­—
 uint8_t UtzGetAckCmd(uint8_t cmd) {
     return cmd | 0x80;
 }
 
-// UtzGetReqCmd µÃµ½ÇëÇóÃüÁî×Ö
+// UtzGetReqCmd å¾—åˆ°è¯·æ±‚å‘½ä»¤å­—
 uint8_t UtzGetReqCmd(uint8_t cmd) {
     return cmd & 0x7f;
 }
 
-// UtzGetFrameLen È¥³ıÎ²×º»ñÈ¡ÕæÊµÖ¡³¤
-// ·µ»ØµÄÊÇÖ¡³¤.Èç¹û·µ»ØÖµÊÇ0±íÊ¾»ñÈ¡Ê§°Ü
+// UtzGetFrameLen å»é™¤å°¾ç¼€è·å–çœŸå®å¸§é•¿
+// è¿”å›çš„æ˜¯å¸§é•¿.å¦‚æœè¿”å›å€¼æ˜¯0è¡¨ç¤ºè·å–å¤±è´¥
 int UtzGetFrameLen(uint8_t* data, int dataLen) {
     if (dataLen < sizeof(UtzStandardHeader)) {
         return 0;
     }
 
-    UtzStandardHeaderPayloadLen payloadLen;
-    payloadLen.Value = (data[0] << 8) + data[1];
-    if (dataLen < sizeof(UtzStandardHeader) + payloadLen.Bit.Len) {
+    uint16_t payloadLen = (data[0] << 8) + data[1];
+    if (dataLen < sizeof(UtzStandardHeader) + payloadLen) {
         return 0;
     }
-    return sizeof(UtzStandardHeader) + payloadLen.Bit.Len;
+    return sizeof(UtzStandardHeader) + payloadLen;
+}
+
+// UtzGetFrameIndex è·å–å¸§åºå·
+uint8_t UtzGetFrameIndex(void) {
+    static uint8_t index = 0;
+    index++;
+    return adhoccIndex;
 }

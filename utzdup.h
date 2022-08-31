@@ -1,5 +1,5 @@
 // Copyright 2022-2022 The jdh99 Authors. All rights reserved.
-// RFF 8£ºDevice Upgrade Protocol(DUP)
+// RFF 8ï¼šDevice Upgrade Protocol(DUP)
 // Authors: jdh99 <jdh821@163.com>
 
 #ifndef UTZ_DUP_H
@@ -7,109 +7,109 @@
 
 #include <stdint.h>
 
-// Ğ­Òé°æ±¾
+// åè®®ç‰ˆæœ¬
 #define UTZ_DUP_VERSION_NAME "1.3"
 
-// ÃüÁî×Ö
-// ¶ÁÈ¡°æ±¾ĞÅÏ¢
+// å‘½ä»¤å­—
+// è¯»å–ç‰ˆæœ¬ä¿¡æ¯
 #define UTZ_DUP_READ_VERSION 0x10
-// ¿ªÊ¼Éı¼¶
+// å¼€å§‹å‡çº§
 #define UTZ_DUP_START 0x11
-// Í£Ö¹Éı¼¶
+// åœæ­¢å‡çº§
 #define UTZ_DUP_STOP 0x12
-// ¶ÁÈ¡Éı¼¶ÎÄ¼şĞÅÏ¢
+// è¯»å–å‡çº§æ–‡ä»¶ä¿¡æ¯
 #define UTZ_DUP_READ_FILE_INFO 0x13
-// ¶ÁÈ¡Éı¼¶ÎÄ¼şÊı¾İ
+// è¯»å–å‡çº§æ–‡ä»¶æ•°æ®
 #define UTZ_DUP_READ_FILE_DATA 0x14
 
 #pragma pack(1)
 
-// Í¨ĞÅ½á¹¹Ìå¶¨Òå
-// UtzDupAckReadVersion ¶ÁÈ¡°æ±¾ĞÅÏ¢Ó¦´ğ
+// é€šä¿¡ç»“æ„ä½“å®šä¹‰
+// UtzDupAckReadVersion è¯»å–ç‰ˆæœ¬ä¿¡æ¯åº”ç­”
 typedef struct {
-    // Éè±¸ÀàĞÍ
+    // è®¾å¤‡ç±»å‹
     uint16_t DeviceType;
-    // °æ±¾ºÅ
+    // ç‰ˆæœ¬å·
     uint8_t Version;
-    // Éı¼¶ÎÄ¼ş°æ±¾ºÅ
+    // å‡çº§æ–‡ä»¶ç‰ˆæœ¬å·
     uint8_t UpgradeFileVersion;
-    // Éı¼¶½ø¶È.È¡Öµ:0-100
+    // å‡çº§è¿›åº¦.å–å€¼:0-100
     uint8_t UpgradeProgress;
 } UtzDupAckReadVersion;
 
-// UtzDupReqStart ¿ªÊ¼Éı¼¶ÇëÇó
+// UtzDupReqStart å¼€å§‹å‡çº§è¯·æ±‚
 typedef struct {
-    // Éè±¸ÀàĞÍ
+    // è®¾å¤‡ç±»å‹
     uint16_t DeviceType;
-    // Éı¼¶ÎÄ¼ş°æ±¾ºÅ
+    // å‡çº§æ–‡ä»¶ç‰ˆæœ¬å·
     uint8_t UpgradeFileVersion;
 } UtzDupReqStart;
 
-// UtzDupAckStart ¿ªÊ¼Éı¼¶Ó¦´ğ
+// UtzDupAckStart å¼€å§‹å‡çº§åº”ç­”
 typedef struct {
     uint8_t Result;
 } UtzDupAckStart;
 
-// ½á¹û
-// ³É¹¦
+// ç»“æœ
+// æˆåŠŸ
 #define UTZ_DUP_START_RESULT_OK 0x0
-// Ê§°Ü.ÆäËû
+// å¤±è´¥.å…¶ä»–
 #define UTZ_DUP_START_RESULT_OTHER 0x1
-// Ê§°Ü.Éè±¸ÀàĞÍ²»Æ¥Åä
+// å¤±è´¥.è®¾å¤‡ç±»å‹ä¸åŒ¹é…
 #define UTZ_DUP_START_RESULT_WRONG_DEVICE_TYPE 0x2
-// Ê§°Ü.Èí¼ş°æ±¾ºÅÏàÍ¬
+// å¤±è´¥.è½¯ä»¶ç‰ˆæœ¬å·ç›¸åŒ
 #define UTZ_DUP_START_RESULT_SAME_VERSION 0x3
 
-// UtzDupReqReadUpgradeFileInfo ¶ÁÈ¡Éı¼¶ÎÄ¼şĞÅÏ¢ÇëÇó
+// UtzDupReqReadUpgradeFileInfo è¯»å–å‡çº§æ–‡ä»¶ä¿¡æ¯è¯·æ±‚
 typedef struct {
-    // Éè±¸ÀàĞÍ
+    // è®¾å¤‡ç±»å‹
     uint16_t DeviceType;
-    // µ±Ç°°æ±¾ºÅ
+    // å½“å‰ç‰ˆæœ¬å·
     uint8_t Version;
 } UtzDupReqReadUpgradeFileInfo;
 
-// UtzDupAckReadUpgradeFileInfo ¶ÁÈ¡Éı¼¶ÎÄ¼şĞÅÏ¢Ó¦´ğ
+// UtzDupAckReadUpgradeFileInfo è¯»å–å‡çº§æ–‡ä»¶ä¿¡æ¯åº”ç­”
 typedef struct {
-    // ÎÄ¼şÉè±¸ÀàĞÍ
+    // æ–‡ä»¶è®¾å¤‡ç±»å‹
     uint16_t FileDeviceType;
-    // ÎÄ¼şÈí¼ş°æ±¾
+    // æ–‡ä»¶è½¯ä»¶ç‰ˆæœ¬
     uint8_t FileVersion;
-    // ÎÄ¼ş×Ü×Ö½ÚÊı
+    // æ–‡ä»¶æ€»å­—èŠ‚æ•°
     uint32_t FileTotalBytes;
-    // Ğ£Ñé·½Ê½.0:MD5,1:CRC16,2:CRC32
+    // æ ¡éªŒæ–¹å¼.0:MD5,1:CRC16,2:CRC32
     uint8_t CheckType;
-    // ÎÄ¼şĞ£ÑéÂë
+    // æ–‡ä»¶æ ¡éªŒç 
     uint8_t FileCheckSum[16];
 } UtzDupAckReadUpgradeFileInfo;
 
-// Ğ£Ñé·½Ê½
+// æ ¡éªŒæ–¹å¼
 #define UTZ_DUP_CHECK_TYPE_MD5 0
 #define UTZ_DUP_CHECK_TYPE_CRC16 1
 #define UTZ_DUP_CHECK_TYPE_CRC32 2
 
-// UtzDupReqReadUpgradeFileData ¶ÁÈ¡Éı¼¶ÎÄ¼şÊı¾İÇëÇó
+// UtzDupReqReadUpgradeFileData è¯»å–å‡çº§æ–‡ä»¶æ•°æ®è¯·æ±‚
 typedef struct {
-    // Éè±¸ÀàĞÍ
+    // è®¾å¤‡ç±»å‹
     uint16_t DeviceType;
-    // °æ±¾ºÅ
+    // ç‰ˆæœ¬å·
     uint8_t Version;
-    // Éı¼¶ÎÄ¼ş°æ±¾ºÅ
+    // å‡çº§æ–‡ä»¶ç‰ˆæœ¬å·
     uint8_t UpgradeFileVersion;
-    // Æ«ÒÆµØÖ·
+    // åç§»åœ°å€
     uint32_t Offset;
 } UtzDupReqReadUpgradeFileData;
 
-// UtzDupAckReadUpgradeFileData ¶ÁÈ¡Éı¼¶ÎÄ¼şÊı¾İÓ¦´ğ
+// UtzDupAckReadUpgradeFileData è¯»å–å‡çº§æ–‡ä»¶æ•°æ®åº”ç­”
 typedef struct {
-    // ÎÄ¼şÉè±¸ÀàĞÍ
+    // æ–‡ä»¶è®¾å¤‡ç±»å‹
     uint16_t FileDeviceType;
-    // ÎÄ¼şÈí¼ş°æ±¾
+    // æ–‡ä»¶è½¯ä»¶ç‰ˆæœ¬
     uint8_t FileVersion;
-    // Æ«ÒÆµØÖ·
+    // åç§»åœ°å€
     uint32_t Offset;
-    // Êı¾İ³¤¶È
+    // æ•°æ®é•¿åº¦
     uint16_t DataLen;
-    // Êı¾İ
+    // æ•°æ®
     uint8_t Data[];
 } UtzDupAckReadUpgradeFileData;
 

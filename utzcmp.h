@@ -1,5 +1,5 @@
 // Copyright 2021-2022 The jdh99 Authors. All rights reserved.
-// RFF 4£ºControl Message Protocol(CMP)
+// RFF 4ï¼šControl Message Protocol(CMP)
 // Authors: jdh99 <jdh821@163.com>
 
 #ifndef UTZ_CMP_H
@@ -7,83 +7,83 @@
 
 #include <stdint.h>
 
-// °æ±¾
+// ç‰ˆæœ¬
 #define UTZ_CMP_VERSION_NAME "1.2"
 
-// ÏûÏ¢ÀàĞÍ
-// ÉêÇë´Ó»ú
+// æ¶ˆæ¯ç±»å‹
+// ç”³è¯·ä»æœº
 #define UTZ_CMP_APPLY_SLAVE 0x25
-// Á¬½Ó¸¸Â·ÓÉ
+// è¿æ¥çˆ¶è·¯ç”±
 #define UTZ_CMP_CONNECT_PARENT 0x26
-// ¶ÁÈ¡ÔÚÏß×´Ì¬
+// è¯»å–åœ¨çº¿çŠ¶æ€
 #define UTZ_CMP_READ_ONLINE_STATE 0x3B
-// ÍÆËÍÔÚÏß×´Ì¬
+// æ¨é€åœ¨çº¿çŠ¶æ€
 #define UTZ_CMP_PUSH_ONLINE_STATE 0x3C
 
 #pragma pack(1)
 
-// Í¨ĞÅ½á¹¹Ìå¶¨Òå
-// UtzCmpReqApplySlave ÉêÇë´Ó»úÖ¡ÇëÇó
+// é€šä¿¡ç»“æ„ä½“å®šä¹‰
+// UtzCmpReqApplySlave ç”³è¯·ä»æœºå¸§è¯·æ±‚
 typedef struct {
-    // ÒÑ·ÖÅäµÄ´Ó»úµØÖ·
+    // å·²åˆ†é…çš„ä»æœºåœ°å€
     uint32_t AssignedSlaveIA;
 } UtzCmpReqApplySlave;
 
-// UtzCmpAckApplySlave ÉêÇë´Ó»úÖ¡Ó¦´ğ
+// UtzCmpAckApplySlave ç”³è¯·ä»æœºå¸§åº”ç­”
 typedef struct {
-    // ½á¹û
+    // ç»“æœ
     uint8_t Result;
-    // ´Ó»úµØÖ·
+    // ä»æœºåœ°å€
     uint32_t SlaveIA;
-    // ´Ó»úµÄIPµØÖ·
+    // ä»æœºçš„IPåœ°å€
     uint32_t SlaveIP;
-    // ´Ó»úµÄ¶Ë¿ÚºÅ
+    // ä»æœºçš„ç«¯å£å·
     uint16_t SlavePort;
-    // ´Ó»úµÄ¿ªÏúÖµ
+    // ä»æœºçš„å¼€é”€å€¼
     uint8_t SlaveCost;
 } UtzCmpAckApplySlave;
 
-// ½á¹û
-// ³É¹¦
+// ç»“æœ
+// æˆåŠŸ
 #define UTZ_CMP_APPLY_SLAVE_RESULT_OK 0x0
-// Ê§°Ü,ÆäËû
+// å¤±è´¥,å…¶ä»–
 #define UTZ_CMP_APPLY_SLAVE_RESULT_OTHER 0x1
-// Ê§°Ü,ÎŞÈ¨ÏŞÁ¬½Ó
+// å¤±è´¥,æ— æƒé™è¿æ¥
 #define UTZ_CMP_APPLY_SLAVE_RESULT_NO_PERMISSION 0x2
-// Ê§°Ü,ÎŞ´Ó»ú
+// å¤±è´¥,æ— ä»æœº
 #define UTZ_CMP_APPLY_SLAVE_RESULT_NO_SLAVE 0x3
 
-// UtzCmpAckApplySlave Á¬½Ó¸¸Â·ÓÉÓ¦´ğ
+// UtzCmpAckApplySlave è¿æ¥çˆ¶è·¯ç”±åº”ç­”
 typedef struct {
-    // ½á¹û
+    // ç»“æœ
     uint8_t Result;
-    // ¿ªÏúÖµ
+    // å¼€é”€å€¼
     uint8_t Cost;
 } UtzCmpAckConnectParent;
 
-// ½á¹û
-// ³É¹¦
+// ç»“æœ
+// æˆåŠŸ
 #define UTZ_CMP_CONNECT_PARENT_RESULT_OK 0x0
-// Ê§°Ü,ÆäËû
+// å¤±è´¥,å…¶ä»–
 #define UTZ_CMP_CONNECT_PARENT_RESULT_OTHER 0x1
-// Ê§°Ü,±¾»ú²»ÊÇÂ·ÓÉ
+// å¤±è´¥,æœ¬æœºä¸æ˜¯è·¯ç”±
 #define UTZ_CMP_CONNECT_PARENT_RESULT_NOT_ROUTER 0x2
-// Ê§°Ü,ÎŞÈ¨ÏŞÁ¬½Ó
+// å¤±è´¥,æ— æƒé™è¿æ¥
 #define UTZ_CMP_CONNECT_PARENT_RESULT_NO_PERSSION 0x3
 
-// UtzCmpReadOnlineState ¶ÁÈ¡ÔÚÏß×´Ì¬Ó¦´ğ
+// UtzCmpReadOnlineState è¯»å–åœ¨çº¿çŠ¶æ€åº”ç­”
 typedef struct {
-    // ÔÚÏß×´Ì¬.0£ºµôÏß¡£1£ºÔÚÏß
+    // åœ¨çº¿çŠ¶æ€.0ï¼šæ‰çº¿ã€‚1ï¼šåœ¨çº¿
     uint8_t IsOnline;
-    // ¸¸Â·ÓÉÈ«Çòµ¥²¥µØÖ·
+    // çˆ¶è·¯ç”±å…¨çƒå•æ’­åœ°å€
     uint32_t IA;
 } UtzCmpAckReadOnlineState;
 
-// ÍÆËÍÔÚÏß×´Ì¬ÇëÇó
+// æ¨é€åœ¨çº¿çŠ¶æ€è¯·æ±‚
 typedef struct {
-    // ÔÚÏß×´Ì¬.0£ºµôÏß¡£1£ºÔÚÏß
+    // åœ¨çº¿çŠ¶æ€.0ï¼šæ‰çº¿ã€‚1ï¼šåœ¨çº¿
     uint8_t IsOnline;
-    // ¸¸Â·ÓÉÈ«Çòµ¥²¥µØÖ·
+    // çˆ¶è·¯ç”±å…¨çƒå•æ’­åœ°å€
     uint32_t IA;
 } UtzCmpReqPushOnlineState;
 

@@ -1,5 +1,5 @@
 // Copyright 2021-2022 The jdh99 Authors. All rights reserved.
-// RFF 2£ºExtension Header Protocol(EHP)
+// RFF 2ï¼šExtension Header Protocol(EHP)
 // Authors: jdh99 <jdh821@163.com>
 
 #ifndef UTZ_EHP_H
@@ -7,15 +7,15 @@
 
 #include "tztype.h"
 
-// °æ±¾
+// ç‰ˆæœ¬
 #define UTZ_EHP_VERSION_NAME "1.2"
 
-// À©Õ¹Í·²¿
-// Â·ÓÉÍ·²¿
+// æ‰©å±•å¤´éƒ¨
+// è·¯ç”±å¤´éƒ¨
 #define UTZ_HEADER_ROUTE 0x1
-// ·ÖÆ¬Í·²¿
+// åˆ†ç‰‡å¤´éƒ¨
 #define UTZ_HEADER_FRAGMENT 0x2
-// ¼ÓÃÜÍ·²¿
+// åŠ å¯†å¤´éƒ¨
 #define UTZ_HEADER_ENCRYPTION 0x3
 // FLP
 #define UTZ_HEADER_FLP 0x4
@@ -35,67 +35,67 @@
 #define UTZ_HEADER_ITCP 0xB
 // DAP
 #define UTZ_HEADER_DAP 0xC
-// AÀàRSSIÍ·²¿
+// Aç±»RSSIå¤´éƒ¨
 #define UTZ_HEADER_RSSI_A 0xD
-// BÀàRSSIÍ·²¿
+// Bç±»RSSIå¤´éƒ¨
 #define UTZ_HEADER_RSSI_B 0xE
-// AÀà·¢ËÍ¿ØÖÆÍ·²¿
+// Aç±»å‘é€æ§åˆ¶å¤´éƒ¨
 #define UTZ_HEADER_RADIO_TX_CONTROL_A 0xF
-// 125K¼¤·¢RSSIÍ·²¿
+// 125Kæ¿€å‘RSSIå¤´éƒ¨
 #define UTZ_HEADER_EXCITER_RSSI 0x10
-// AÀàTOF¶¨Î»Í·²¿
+// Aç±»TOFå®šä½å¤´éƒ¨
 #define UTZ_HEADER_TOF_LOCATION_A 0x11
-// AÀàDW1000½ÓÊÕÍ·²¿
+// Aç±»DW1000æ¥æ”¶å¤´éƒ¨
 #define UTZ_HEADER_DW1000_RX_A 0x12
-// AÀàDW1000·¢ËÍÍê³ÉÍ·²¿
+// Aç±»DW1000å‘é€å®Œæˆå¤´éƒ¨
 #define UTZ_HEADER_DW1000_TX_END_A 0x13
-// AÀà×ø±êÍ·²¿
+// Aç±»åæ ‡å¤´éƒ¨
 #define UTZ_HEADER_COORDINATE_A 0x14
-// Ê±¼ä´ÁÍ·²¿
+// æ—¶é—´æˆ³å¤´éƒ¨
 #define UTZ_HEADER_TIMESTAMP 0x15
-// ´úÀíÍ·²¿
+// ä»£ç†å¤´éƒ¨
 #define UTZ_HEADER_AGENT 0x16
-// ×Ô×éÍø¿ØÖÆÍ·²¿
+// è‡ªç»„ç½‘æ§åˆ¶å¤´éƒ¨
 #define UTZ_HEADER_ADHOCC 0x17
-// Ñ¹ËõÍ·²¿¸´ºÏÖ¡
+// å‹ç¼©å¤´éƒ¨å¤åˆå¸§
 #define UTZ_HEADER_COMPRESS_COMPLEX 0x18
-// ±ê×¼Í·²¿¸´ºÏÖ¡
+// æ ‡å‡†å¤´éƒ¨å¤åˆå¸§
 #define UTZ_HEADER_STANDARD_COMPLEX 0x19
-// È«Çòµ¥²¥µØÖ··ÖÅä·şÎñÆ÷·ÃÎÊĞ­Òé
+// å…¨çƒå•æ’­åœ°å€åˆ†é…æœåŠ¡å™¨è®¿é—®åè®®
 #define UTZ_HEADER_GUAAP 0x1A
-// ¹Ì¶¨µØÖ·½âÎö·şÎñÆ÷·ÃÎÊĞ­Òé
-// ¶©ÔÄ·şÎñÆ÷·ÃÎÊĞ­Òé
-// ¼òµ¥°²È«Í·²¿
+// å›ºå®šåœ°å€è§£ææœåŠ¡å™¨è®¿é—®åè®®
+// è®¢é˜…æœåŠ¡å™¨è®¿é—®åè®®
+// ç®€å•å®‰å…¨å¤´éƒ¨
 #define UTZ_HEADER_SIMPLE_SECURITY 0x1D
-// ¶¨³¤´«Êä¿ØÖÆÍ·²¿
+// å®šé•¿ä¼ è¾“æ§åˆ¶å¤´éƒ¨
 #define UTZ_HEADER_FIXED_LENGTH_TRANSFER_CONTROL 0x1E
-// ÖĞ¼ÌÍ·²¿
+// ä¸­ç»§å¤´éƒ¨
 #define UTZ_HEADER_REPEAT 0x1F
-// ×Ó·ÖÆ¬Í·²¿
+// å­åˆ†ç‰‡å¤´éƒ¨
 #define UTZ_HEADER_SUB_FRAGMENT 0x20
-// ÏµÍ³ÈÕÖ¾Ğ­Òé
+// ç³»ç»Ÿæ—¥å¿—åè®®
 #define UTZ_HEADER_SLP 0x22
-// Éè±¸¼äÍ¨ĞÅĞ­Òé
+// è®¾å¤‡é—´é€šä¿¡åè®®
 #define UTZ_HEADER_DCOM 0x23
-// ÎïÁªÍøÖÕ¶ËĞ­Òé
+// ç‰©è”ç½‘ç»ˆç«¯åè®®
 #define UTZ_HEADER_ISH 0x24
-// CRC16Í¨ĞÅĞ­Òé
+// CRC16é€šä¿¡åè®®
 #define UTZ_HEADER_CCP 0x25
-// Ô­Ê¼Êı¾İÍ¨ĞÅĞ­Òé
+// åŸå§‹æ•°æ®é€šä¿¡åè®®
 #define UTZ_HEADER_RP 0x26
-// ×Ô×éÍø¿ØÖÆ±¨ÎÄĞ­Òé
+// è‡ªç»„ç½‘æ§åˆ¶æŠ¥æ–‡åè®®
 #define UTZ_HEADER_ADHOCCMP 0x27
 
 #pragma pack(1)
 
-// RouteHeader Â·ÓÉÍ·²¿½á¹¹
+// RouteHeader è·¯ç”±å¤´éƒ¨ç»“æ„
 typedef struct {    
     uint8_t NextHead;
-    // Â·ÓÉµØÖ·
+    // è·¯ç”±åœ°å€
     uint32_t IA;
 } UtzRouteHeader;
 
-// SimpleSecurityHeader ¼òµ¥°²È«Í·²¿½á¹¹
+// SimpleSecurityHeader ç®€å•å®‰å…¨å¤´éƒ¨ç»“æ„
 typedef struct {
     uint8_t NextHead;
     uint8_t PwdLen;
@@ -104,61 +104,61 @@ typedef struct {
 
 typedef union {
     struct {
-        // Æ«ÒÆÁ¿
+        // åç§»é‡
         uint16_t Offset:15;
-        // ×îºóÒ»Æ¬±êÊ¶
+        // æœ€åä¸€ç‰‡æ ‡è¯†
         uint16_t IsLastPiece:1;
     } Bit;
     uint16_t Value;
 } UtzFragmentOffset;
 
-// UtzFragmentHeader ·ÖÆ¬Í·²¿
+// UtzFragmentHeader åˆ†ç‰‡å¤´éƒ¨
 typedef struct {
-    // Êı¾İÍ·²¿
+    // æ•°æ®å¤´éƒ¨
     uint8_t Head;
-    // ±êÊ¶·û
+    // æ ‡è¯†ç¬¦
     uint16_t Flag;
-    // ·ÖÆ¬Æ«ÒÆÁ¿
+    // åˆ†ç‰‡åç§»é‡
     UtzFragmentOffset Offset;
 } UtzFragmentHeader;
 
 #pragma pack()
 
-// UtzBytesToRouteHeader ×Ö½ÚÁ÷×ª»»ÎªÂ·ÓÉÍ·²¿.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ×Ö½ÚÁ÷data±ØĞë´óÓÚÂ·ÓÉÍ·²¿³¤¶È
-// ·µ»ØÍ·²¿ÒÔ¼°Í·²¿×Ö½ÚÊı.Í·²¿Îªnil»òÕß×Ö½ÚÊıÎª0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToRouteHeader å­—èŠ‚æµè½¬æ¢ä¸ºè·¯ç”±å¤´éƒ¨.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// å­—èŠ‚æµdataå¿…é¡»å¤§äºè·¯ç”±å¤´éƒ¨é•¿åº¦
+// è¿”å›å¤´éƒ¨ä»¥åŠå¤´éƒ¨å­—èŠ‚æ•°.å¤´éƒ¨ä¸ºnilæˆ–è€…å­—èŠ‚æ•°ä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToRouteHeader(uint8_t* data, int dataLen, UtzRouteHeader* header);
 
-// UtzRouteHeader Â·ÓÉÍ·²¿×ª»»Îª×Ö½ÚÁ÷
-// ×Ö½ÚÁ÷data±ØĞë´óÓÚÂ·ÓÉÍ·²¿³¤¶È
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzRouteHeader è·¯ç”±å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ
+// å­—èŠ‚æµdataå¿…é¡»å¤§äºè·¯ç”±å¤´éƒ¨é•¿åº¦
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzRouteHeaderToBytes(UtzRouteHeader* header, uint8_t* data, int dataSize);
 
-// UtzIsPayloadHeader ÊÇ·ñÔØºÉÍ·²¿
+// UtzIsPayloadHeader æ˜¯å¦è½½è·å¤´éƒ¨
 bool UtzIsPayloadHeader(uint8_t head);
 
-// UtzBytesToSimpleSecurityHeader ×Ö½ÚÁ÷×ª»»Îª¼òµ¥°²È«Í·²¿
-// offsetÊÇ×ª»»ºó×Ö½ÚÁ÷ĞÂµÄÆ«ÒÆµØÖ·.Èç¹ûÎª0±íÊ¾×ª»»Ê§°Ü.²»ĞèÒªÖªµÀ¿ÉÌîĞ´NULL
-// ·µ»ØÍ·²¿Ö¸Õë,ÎªNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// UtzBytesToSimpleSecurityHeader å­—èŠ‚æµè½¬æ¢ä¸ºç®€å•å®‰å…¨å¤´éƒ¨
+// offsetæ˜¯è½¬æ¢åå­—èŠ‚æµæ–°çš„åç§»åœ°å€.å¦‚æœä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥.ä¸éœ€è¦çŸ¥é“å¯å¡«å†™NULL
+// è¿”å›å¤´éƒ¨æŒ‡é’ˆ,ä¸ºNULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataLen, int* offset);
 
-// SimpleSecurityHeaderToBytes ¼òµ¥°²È«Í·²¿×ª»»Îª×Ö½ÚÁ÷
-// ·µ»ØµÄÊÇ×Ö½ÚÁ÷.Èç¹ûÊÇNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// SimpleSecurityHeaderToBytes ç®€å•å®‰å…¨å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ
+// è¿”å›çš„æ˜¯å­—èŠ‚æµ.å¦‚æœæ˜¯NULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 TZBufferDynamic* UtzSimpleSecurityHeaderToBytes(UtzSimpleSecurityHeader* header);
 
-// UtzSimpleSecurityHeaderDataToBytes ¼òµ¥°²È«Í·²¿Êı¾İ×ª»»Îª×Ö½ÚÁ÷
-// ·µ»ØµÄÊÇ×Ö½ÚÁ÷.Èç¹ûÊÇNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// UtzSimpleSecurityHeaderDataToBytes ç®€å•å®‰å…¨å¤´éƒ¨æ•°æ®è½¬æ¢ä¸ºå­—èŠ‚æµ
+// è¿”å›çš„æ˜¯å­—èŠ‚æµ.å¦‚æœæ˜¯NULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd);
 
-// UtzFragmentHeaderToBytes ·ÖÆ¬Í·²¿×ª»»Îª×Ö½ÚÁ÷
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzFragmentHeaderToBytes åˆ†ç‰‡å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataSize);
 
-// UtzBytesToFragmentHeader ×Ö½ÚÁ÷×ª»»Îª·ÖÆ¬Í·²¿.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ·µ»ØÍ·²¿ÒÔ¼°Í·²¿×Ö½ÚÊı.×Ö½ÚÊıÎª0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToFragmentHeader å­—èŠ‚æµè½¬æ¢ä¸ºåˆ†ç‰‡å¤´éƒ¨.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// è¿”å›å¤´éƒ¨ä»¥åŠå¤´éƒ¨å­—èŠ‚æ•°.å­—èŠ‚æ•°ä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToFragmentHeader(uint8_t* data, int dataLen, UtzFragmentHeader* header);
 
-// UtzIsFragmentFrame ÊÇ·ñÊÇ·ÖÆ¬Ö¡
+// UtzIsFragmentFrame æ˜¯å¦æ˜¯åˆ†ç‰‡å¸§
 bool UtzIsFragmentFrame(uint8_t* data, int dataLen);
 
 #endif

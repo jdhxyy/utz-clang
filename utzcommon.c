@@ -1,5 +1,5 @@
 // Copyright 2021-2021 The jdh99 Authors. All rights reserved.
-// Í¨ÓÃÄ£¿é
+// é€šç”¨æ¨¡å—
 // Authors: jdh99 <jdh821@163.com>
 
 #include "utzcommon.h"
@@ -13,10 +13,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// ÄÚ´æ¹ÜÀíid
+// å†…å­˜ç®¡ç†id
 static int mid = -1;
 
-// UtzGetMid ¶ÁÈ¡ÄÚ´æid
+// UtzGetMid è¯»å–å†…å­˜id
 int UtzGetMid(void) {
     if (mid == -1) {
         mid = TZMallocRegister(0, UTZ_TAG, UTZ_MALLOC_SIZE);
@@ -27,20 +27,20 @@ int UtzGetMid(void) {
     return mid;
 }
 
-// BytesToIA ´Ó×Ö½ÚÁ÷ÖĞÈ¡³öIAµØÖ·.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ×Ö½ÚÁ÷³¤¶È±ØĞë±£Ö¤´óÓÚIA_LEN
+// BytesToIA ä»å­—èŠ‚æµä¸­å–å‡ºIAåœ°å€.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// å­—èŠ‚æµé•¿åº¦å¿…é¡»ä¿è¯å¤§äºIA_LEN
 uint32_t UtzBytesToIA(uint8_t* data) {
     uint32_t ia = 0;
     UtzMemcpyReverse((uint8_t*)&ia, data, UTZ_IA_LEN);
     return ia;
 }
 
-// IAToBytes ½«IAµØÖ·×ª»»Îª×Ö½ÚÁ÷.×Ö½ÚÁ÷ÊÇ´ó¶Ë
+// IAToBytes å°†IAåœ°å€è½¬æ¢ä¸ºå­—èŠ‚æµ.å­—èŠ‚æµæ˜¯å¤§ç«¯
 void UtzIAToBytes(uint32_t ia, uint8_t* data) {
     UtzMemcpyReverse(data, (uint8_t*)&ia, UTZ_IA_LEN);
 }
 
-// UtzMemcpyReverse ·­×ª¸´ÖÆ.±ÈÈçsrcÎªĞ¡¶Ë´æ´¢.¿ÉÒÔ×ª»»Îª´ó¶Ë´æ´¢ÔÚdstÖĞ
+// UtzMemcpyReverse ç¿»è½¬å¤åˆ¶.æ¯”å¦‚srcä¸ºå°ç«¯å­˜å‚¨.å¯ä»¥è½¬æ¢ä¸ºå¤§ç«¯å­˜å‚¨åœ¨dstä¸­
 void UtzMemcpyReverse(uint8_t* dst, uint8_t* src, int size) {
     for (int i = 0; i < size; i++) {
         dst[i] = src[size - 1 - i];

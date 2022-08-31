@@ -1,12 +1,9 @@
 // Copyright 2019-2022 The jdh99 Authors. All rights reserved.
-// Î¢Ğ­ÒéÕ»Í·ÎÄ¼ş
+// å¾®åè®®æ ˆå¤´æ–‡ä»¶
 // Authors: jdh99 <jdh821@163.com>
 
 #ifndef UTZ_H
 #define UTZ_H
-
-// Ğ­Òé×å°æ±¾ºÅ
-#define UTZ_NLP_VERSION 2
 
 #include "utzcommon.h"
 #include "utznlp.h"

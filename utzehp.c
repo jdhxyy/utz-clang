@@ -1,5 +1,5 @@
 // Copyright 2021-2022 The jdh99 Authors. All rights reserved.
-// RFF 2£ºExtension Header Protocol(EHP)
+// RFF 2ï¼šExtension Header Protocol(EHP)
 // Authors: jdh99 <jdh821@163.com>
 
 #include "utzehp.h"
@@ -12,11 +12,11 @@
 
 #include <string.h>
 
-// UtzBytesToRouteHeader ×Ö½ÚÁ÷×ª»»ÎªÂ·ÓÉÍ·²¿.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ×Ö½ÚÁ÷data±ØĞë´óÓÚÂ·ÓÉÍ·²¿³¤¶È
-// ·µ»ØÍ·²¿ÒÔ¼°Í·²¿×Ö½ÚÊı.Í·²¿Îªnil»òÕß×Ö½ÚÊıÎª0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToRouteHeader å­—èŠ‚æµè½¬æ¢ä¸ºè·¯ç”±å¤´éƒ¨.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// å­—èŠ‚æµdataå¿…é¡»å¤§äºè·¯ç”±å¤´éƒ¨é•¿åº¦
+// è¿”å›å¤´éƒ¨ä»¥åŠå¤´éƒ¨å­—èŠ‚æ•°.å¤´éƒ¨ä¸ºnilæˆ–è€…å­—èŠ‚æ•°ä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToRouteHeader(uint8_t* data, int dataLen, UtzRouteHeader* header) {
-    // Í·²¿Êı¾İ±ØĞëÍêÕû
+    // å¤´éƒ¨æ•°æ®å¿…é¡»å®Œæ•´
     if (dataLen < 5) {
         return 0;
     }
@@ -26,9 +26,9 @@ int UtzBytesToRouteHeader(uint8_t* data, int dataLen, UtzRouteHeader* header) {
     return 5;
 }
 
-// UtzRouteHeader Â·ÓÉÍ·²¿×ª»»Îª×Ö½ÚÁ÷
-// ×Ö½ÚÁ÷data±ØĞë´óÓÚÂ·ÓÉÍ·²¿³¤¶È
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzRouteHeader è·¯ç”±å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ
+// å­—èŠ‚æµdataå¿…é¡»å¤§äºè·¯ç”±å¤´éƒ¨é•¿åº¦
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzRouteHeaderToBytes(UtzRouteHeader* header, uint8_t* data, int dataSize) {
     if (dataSize < 5) {
         return 0;
@@ -38,7 +38,7 @@ int UtzRouteHeaderToBytes(UtzRouteHeader* header, uint8_t* data, int dataSize) {
     return 5;
 }
 
-// UtzIsPayloadHeader ÊÇ·ñÔØºÉÍ·²¿
+// UtzIsPayloadHeader æ˜¯å¦è½½è·å¤´éƒ¨
 bool UtzIsPayloadHeader(uint8_t head) {
     return (head == UTZ_HEADER_CCP || head == UTZ_HEADER_RP || head == UTZ_HEADER_FLP || head == UTZ_HEADER_WTS || 
         head == UTZ_HEADER_DUP || head == UTZ_HEADER_SFTPA || head == UTZ_HEADER_SFTPB || head == UTZ_HEADER_STCP || 
@@ -47,15 +47,15 @@ bool UtzIsPayloadHeader(uint8_t head) {
         head == UTZ_HEADER_DCOM || head == UTZ_HEADER_ISH);
     }
 
-// UtzBytesToSimpleSecurityHeader ×Ö½ÚÁ÷×ª»»Îª¼òµ¥°²È«Í·²¿
-// offsetÊÇ×ª»»ºó×Ö½ÚÁ÷ĞÂµÄÆ«ÒÆµØÖ·.Èç¹ûÎª0±íÊ¾×ª»»Ê§°Ü.²»ĞèÒªÖªµÀ¿ÉÌîĞ´NULL
-// ·µ»ØÍ·²¿Ö¸Õë,ÎªNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// UtzBytesToSimpleSecurityHeader å­—èŠ‚æµè½¬æ¢ä¸ºç®€å•å®‰å…¨å¤´éƒ¨
+// offsetæ˜¯è½¬æ¢åå­—èŠ‚æµæ–°çš„åç§»åœ°å€.å¦‚æœä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥.ä¸éœ€è¦çŸ¥é“å¯å¡«å†™NULL
+// è¿”å›å¤´éƒ¨æŒ‡é’ˆ,ä¸ºNULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataLen, int* offset) {
     if (offset != NULL) {
         *offset = 0;
     }
 
-    // Í·²¿Êı¾İ±ØĞëÍêÕû
+    // å¤´éƒ¨æ•°æ®å¿…é¡»å®Œæ•´
     if (dataLen < 2) {
         return NULL;
     }
@@ -64,7 +64,7 @@ UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataL
         return NULL;
     }
 
-    // ¼Ó1ÊÇ¿¼ÂÇµ½ÃÜÂëÊÇ×Ö·û´®,CÓïÑÔÄ©Î²Ğè¼Ó'\0'
+    // åŠ 1æ˜¯è€ƒè™‘åˆ°å¯†ç æ˜¯å­—ç¬¦ä¸²,Cè¯­è¨€æœ«å°¾éœ€åŠ '\0'
     UtzSimpleSecurityHeader* header = (UtzSimpleSecurityHeader*)TZMalloc(UtzGetMid(), 
         (int)sizeof(UtzSimpleSecurityHeader) + headerPayloadLen + 1);
     if (header == NULL) {
@@ -80,14 +80,14 @@ UtzSimpleSecurityHeader* UtzBytesToSimpleSecurityHeader(uint8_t* data, int dataL
     return header;
 }
 
-// SimpleSecurityHeaderToBytes ¼òµ¥°²È«Í·²¿×ª»»Îª×Ö½ÚÁ÷
-// ·µ»ØµÄÊÇ×Ö½ÚÁ÷.Èç¹ûÊÇNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// SimpleSecurityHeaderToBytes ç®€å•å®‰å…¨å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ
+// è¿”å›çš„æ˜¯å­—èŠ‚æµ.å¦‚æœæ˜¯NULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 TZBufferDynamic* UtzSimpleSecurityHeaderToBytes(UtzSimpleSecurityHeader* header) {
     return UtzSimpleSecurityHeaderDataToBytes(header->NextHead, (char*)header->Pwd);
 }
 
-// UtzSimpleSecurityHeaderDataToBytes ¼òµ¥°²È«Í·²¿Êı¾İ×ª»»Îª×Ö½ÚÁ÷
-// ·µ»ØµÄÊÇ×Ö½ÚÁ÷.Èç¹ûÊÇNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// UtzSimpleSecurityHeaderDataToBytes ç®€å•å®‰å…¨å¤´éƒ¨æ•°æ®è½¬æ¢ä¸ºå­—èŠ‚æµ
+// è¿”å›çš„æ˜¯å­—èŠ‚æµ.å¦‚æœæ˜¯NULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd) {
     int pwdLen = (int)strlen(pwd);
     TZBufferDynamic* data = (TZBufferDynamic*)TZMalloc(UtzGetMid(), (int)sizeof(TZBufferDynamic) + pwdLen + 2);
@@ -98,7 +98,7 @@ TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd)
 
     int j = 0;
     data->buf[j++] = nextHead;
-    // Í·²¿Êı¾İ³¤¶È
+    // å¤´éƒ¨æ•°æ®é•¿åº¦
     data->buf[j++] = (uint8_t)pwdLen;
 
     memcpy(data->buf + j, pwd, (size_t)pwdLen);
@@ -107,8 +107,8 @@ TZBufferDynamic* UtzSimpleSecurityHeaderDataToBytes(uint8_t nextHead, char* pwd)
     return data;
 }
 
-// UtzFragmentHeaderToBytes ·ÖÆ¬Í·²¿×ª»»Îª×Ö½ÚÁ÷
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzFragmentHeaderToBytes åˆ†ç‰‡å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataSize) {
     if (dataSize < sizeof(UtzFragmentHeader)) {
         return 0;
@@ -123,8 +123,8 @@ int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataS
     return j;
 }
 
-// UtzBytesToFragmentHeader ×Ö½ÚÁ÷×ª»»Îª·ÖÆ¬Í·²¿.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ·µ»ØÍ·²¿ÒÔ¼°Í·²¿×Ö½ÚÊı.×Ö½ÚÊıÎª0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToFragmentHeader å­—èŠ‚æµè½¬æ¢ä¸ºåˆ†ç‰‡å¤´éƒ¨.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// è¿”å›å¤´éƒ¨ä»¥åŠå¤´éƒ¨å­—èŠ‚æ•°.å­—èŠ‚æ•°ä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToFragmentHeader(uint8_t* data, int dataLen, UtzFragmentHeader* header) {
     if (dataLen < sizeof(UtzFragmentHeader)) {
         return 0;
@@ -140,7 +140,7 @@ int UtzBytesToFragmentHeader(uint8_t* data, int dataLen, UtzFragmentHeader* head
 }
 
 
-// UtzIsFragmentFrame ÊÇ·ñÊÇ·ÖÆ¬Ö¡
+// UtzIsFragmentFrame æ˜¯å¦æ˜¯åˆ†ç‰‡å¸§
 bool UtzIsFragmentFrame(uint8_t* data, int dataLen) {
     int pos = sizeof(UtzStandardHeader) + sizeof(UtzAdhoccHeader) + sizeof(UtzFragmentHeader);
     if (dataLen < pos || data[sizeof(UtzStandardHeader)] != UTZ_HEADER_SUB_FRAGMENT) {

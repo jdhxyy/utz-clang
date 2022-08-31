@@ -1,6 +1,6 @@
 // Copyright 2021-2021 The jdh99 Authors. All rights reserved.
-// RFF 27£ºTZ-STAR×Ô×éÍøÏµÍ³Éè¼Æ
-// Ad Hoc Newwork Control Message Protocol(ADHOCCMP):×Ô×éÍø¿ØÖÆ±¨ÎÄĞ­Òé
+// RFF 27ï¼šTZ-STARè‡ªç»„ç½‘ç³»ç»Ÿè®¾è®¡
+// Ad Hoc Newwork Control Message Protocol(ADHOCCMP):è‡ªç»„ç½‘æ§åˆ¶æŠ¥æ–‡åè®®
 // Authors: jdh99 <jdh821@163.com>
 
 #ifndef UTZ_ADHOCCHEADER_H
@@ -8,96 +8,93 @@
 
 #include "utzcommon.h"
 
-// °æ±¾
+// ç‰ˆæœ¬
 #define UTZ_ADHOCCMP_VERSION_NAME "1.2"
 
-// ×Ô×éÍø¿ØÖÆÍ·²¿³¤¶È
+// è‡ªç»„ç½‘æ§åˆ¶å¤´éƒ¨é•¿åº¦
 #define HEADER_ADHOCC_LEN 15
 
-// ÃüÁî
-// ĞÅ±ê
+// å‘½ä»¤
+// ä¿¡æ ‡
 #define UTZ_ADHOCCMP_BEACON 0x10
-// Ó¦´ğ
+// åº”ç­”
 #define UTZ_ADHOCCMP_ACK 0x11
-// ÇëÇóÍÆËÍ
+// è¯·æ±‚æ¨é€
 #define UTZ_ADHOCCMP_REQUIRE_PUSH 0x12
 
 #pragma pack(1)
 
-// UtzAdhoccHeaderControlWord ×Ô×éÍø¿ØÖÆÍ·²¿¿ØÖÆ×Ö
+// UtzAdhoccHeaderControlWord è‡ªç»„ç½‘æ§åˆ¶å¤´éƒ¨æ§åˆ¶å­—
 typedef union {
     struct {
-        // ĞòºÅ
-        uint8_t Index:4;
-        // ·şÎñÖÊÁ¿.0: Qos0·¢ËÍ²»ĞèÒªÓ¦´ğ 1:Qos1·¢ËÍĞèÒªÓ¦´ğ
+        // åºå·
+        uint8_t Reserved:4;
+        // æœåŠ¡è´¨é‡.0: Qos0å‘é€ä¸éœ€è¦åº”ç­” 1:Qos1å‘é€éœ€è¦åº”ç­”
         bool IsQos1:1;
-        // ½ÓÊÕÄ£Ê½¿ØÖÆÎ».0: Á¢¼´·¢ËÍ.1: Ó¦´ğÊ½·¢ËÍ
+        // æ¥æ”¶æ¨¡å¼æ§åˆ¶ä½.0: ç«‹å³å‘é€.1: åº”ç­”å¼å‘é€
         bool IsReceiveAckSend:1;
-        // Á¬Ğø·¢ËÍ¿ØÖÆÎ»
+        // è¿ç»­å‘é€æ§åˆ¶ä½
         bool IsContinueSend:1;
-        // Ó¦´ğÊ½·¢ËÍ¿ØÖÆÎ»
+        // åº”ç­”å¼å‘é€æ§åˆ¶ä½
         bool IsAckSend:1;
     } Bit;
     uint8_t Value;
 } UtzAdhoccHeaderControlWord;
 
-// UtzAdhoccHeader ×Ô×éÍø¿ØÖÆÍ·²¿½á¹¹
+// UtzAdhoccHeader è‡ªç»„ç½‘æ§åˆ¶å¤´éƒ¨ç»“æ„
 typedef struct {
     uint8_t NextHead;
-    // ¿ØÖÆ×Ö
-    UtzAdhoccHeaderControlWord ControlWord;
-    // ÍøÂçºÅ
-    uint32_t PanIA;
-    // ÖĞ¼ÌÔ´µØÖ·
+    // ä¸­ç»§æºåœ°å€
     uint32_t SrcIA;
-    // ÖĞ¼ÌÄ¿µÄµØÖ·
+    // ä¸­ç»§ç›®çš„åœ°å€
     uint32_t DstIA;
-    // ÀÏ»¯Ê±¼ä
+    // æ§åˆ¶å­—
+    UtzAdhoccHeaderControlWord ControlWord;
+    // è€åŒ–æ—¶é—´
     uint8_t AgingTime;
 } UtzAdhoccHeader;
 
-// Í¨ĞÅ½á¹¹Ìå¶¨Òå
-// UtzAdhoccmpBeacon ĞÅ±ê
+// é€šä¿¡ç»“æ„ä½“å®šä¹‰
+// UtzAdhoccmpBeacon ä¿¡æ ‡
 typedef struct {
-    // ¸¸½ÚµãµØÖ·
+    // ç½‘ç»œåœ°å€
+    uint32_t PanIA;
+    // çˆ¶èŠ‚ç‚¹åœ°å€
     uint32_t ParentIA;
-    // ¶àÌøÊı
+    // å¤šè·³æ•°
     uint8_t Hops;
 } UtzAdhoccmpBeacon;
 
-// UtzAdhoccmpAck Ó¦´ğ
+// UtzAdhoccmpAck åº”ç­”
 typedef struct {
-    // ·¢ËÍÖ¡ÖÖµÄÖ¡ĞòºÅ
+    // å‘é€å¸§ä¸­çš„å¸§åºå·
     uint8_t Index;
 } UtzAdhoccmpAck;
 
-// UtzAdhoccmpRequirePush ÇëÇóÍÆËÍ
+// UtzAdhoccmpRequirePush è¯·æ±‚æ¨é€
 typedef struct {
-    // ÉÏ´ÎÍÆËÍĞòºÅ
+    // ä¸Šæ¬¡æ¨é€åºå·
     uint8_t LastPushIndex;
-    // ÉÏ´ÎÍÆËÍÔ´µØÖ·
+    // ä¸Šæ¬¡æ¨é€æºåœ°å€
     uint32_t LastPushSrcIA;
 } UtzAdhoccmpRequirePush;
 
 #pragma pack()
 
-// UtzBytesToAdhoccHeader ×Ö½ÚÁ÷×ª»»Îª×Ô×éÍø¿ØÖÆÍ·²¿
-// ·µ»ØÍ·²¿ÒÔ¼°Í·²¿×Ö½ÚÊı.×Ö½ÚÊıÎª0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToAdhoccHeader å­—èŠ‚æµè½¬æ¢ä¸ºè‡ªç»„ç½‘æ§åˆ¶å¤´éƒ¨
+// è¿”å›å¤´éƒ¨ä»¥åŠå¤´éƒ¨å­—èŠ‚æ•°.å­—èŠ‚æ•°ä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToAdhoccHeader(uint8_t* data, int dataLen, UtzAdhoccHeader* header);
 
-// UtzADHOCCHeaderToBytes ×Ô×éÍø¿ØÖÆÍ·²¿×ª»»Îª×Ö½ÚÁ÷.×ª»»ºó´æ´¢ÓÚbytesÖĞ
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzADHOCCHeaderToBytes è‡ªç»„ç½‘æ§åˆ¶å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ.è½¬æ¢åå­˜å‚¨äºbytesä¸­
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzAdhoccHeaderToBytes(UtzAdhoccHeader* header, uint8_t* data, int dataSize);
 
-// UtzGetAdhoccIndex »ñÈ¡×Ô×éÍøÖ¡ĞòºÅ
-uint8_t UtzGetAdhoccIndex(void);
-
-// UtzByteToAgingTime ×Ö½Ú×ª»»ÎªÀÏ»¯Ê±¼ä
-// ÀÏ»¯Ê±¼äµ¥Î»:s
+// UtzByteToAgingTime å­—èŠ‚è½¬æ¢ä¸ºè€åŒ–æ—¶é—´
+// è€åŒ–æ—¶é—´å•ä½:s
 int UtzByteToAgingTime(uint8_t byte);
 
-// UtzAgingTimeToByte ÀÏ»¯Ê±¼ä×ª»»Îª×Ö½Ú
-// ÀÏ»¯Ê±¼äµ¥Î»:s
+// UtzAgingTimeToByte è€åŒ–æ—¶é—´è½¬æ¢ä¸ºå­—èŠ‚
+// è€åŒ–æ—¶é—´å•ä½:s
 uint8_t UtzAgingTimeToByte(int agingTime);
 
 #endif

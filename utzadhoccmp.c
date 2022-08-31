@@ -1,33 +1,31 @@
 // Copyright 2021-2021 The jdh99 Authors. All rights reserved.
-// RFF 27£ºTZ-STAR×Ô×éÍøÏµÍ³Éè¼Æ
-// Ad Hoc Newwork Control Message Protocol(ADHOCCMP):×Ô×éÍø¿ØÖÆ±¨ÎÄĞ­Òé
+// RFF 27ï¼šTZ-STARè‡ªç»„ç½‘ç³»ç»Ÿè®¾è®¡
+// Ad Hoc Newwork Control Message Protocol(ADHOCCMP):è‡ªç»„ç½‘æ§åˆ¶æŠ¥æ–‡åè®®
 // Authors: jdh99 <jdh821@163.com>
 
 #include "utz.h"
 
-// UtzBytesToAdhoccHeader ×Ö½ÚÁ÷×ª»»Îª×Ô×éÍø¿ØÖÆÍ·²¿
-// ·µ»ØÍ·²¿ÒÔ¼°Í·²¿×Ö½ÚÊı.×Ö½ÚÊıÎª0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToAdhoccHeader å­—èŠ‚æµè½¬æ¢ä¸ºè‡ªç»„ç½‘æ§åˆ¶å¤´éƒ¨
+// è¿”å›å¤´éƒ¨ä»¥åŠå¤´éƒ¨å­—èŠ‚æ•°.å­—èŠ‚æ•°ä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToAdhoccHeader(uint8_t* data, int dataLen, UtzAdhoccHeader* header) {
-    // Í·²¿Êı¾İ±ØĞëÍêÕû
+    // å¤´éƒ¨æ•°æ®å¿…é¡»å®Œæ•´
     if (dataLen < HEADER_ADHOCC_LEN) {
         return 0;
     }
 
     int j = 0;
     header->NextHead = data[j++];
-    header->ControlWord.Value = data[j++];
-    header->PanIA = UtzBytesToIA(data + j);
-    j += 4;
     header->SrcIA = UtzBytesToIA(data + j);
     j += 4;
     header->DstIA = UtzBytesToIA(data + j);
     j += 4;
+    header->ControlWord.Value = data[j++];
     header->AgingTime = data[j++];
     return j;
 }
 
-// UtzADHOCCHeaderToBytes ×Ô×éÍø¿ØÖÆÍ·²¿×ª»»Îª×Ö½ÚÁ÷.×ª»»ºó´æ´¢ÓÚbytesÖĞ
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzADHOCCHeaderToBytes è‡ªç»„ç½‘æ§åˆ¶å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ.è½¬æ¢åå­˜å‚¨äºbytesä¸­
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzAdhoccHeaderToBytes(UtzAdhoccHeader* header, uint8_t* data, int dataSize) {
     if (dataSize < HEADER_ADHOCC_LEN) {
         return 0;
@@ -35,29 +33,17 @@ int UtzAdhoccHeaderToBytes(UtzAdhoccHeader* header, uint8_t* data, int dataSize)
 
     int j = 0;
     data[j++] = header->NextHead;
-    data[j++] = header->ControlWord.Value;
-    UtzMemcpyReverse(data + j, (uint8_t*)&(header->PanIA), UTZ_IA_LEN);
-    j += UTZ_IA_LEN;
     UtzMemcpyReverse(data + j, (uint8_t*)&(header->SrcIA), UTZ_IA_LEN);
     j += UTZ_IA_LEN;
     UtzMemcpyReverse(data + j, (uint8_t*)&(header->DstIA), UTZ_IA_LEN);
     j += UTZ_IA_LEN;
+    data[j++] = header->ControlWord.Value;
     data[j++] = header->AgingTime;
     return j;
 }
 
-// UtzGetAdhoccIndex »ñÈ¡×Ô×éÍøÖ¡ĞòºÅ
-uint8_t UtzGetAdhoccIndex(void) {
-    static uint8_t adhoccIndex = 0;
-    adhoccIndex++;
-    if (adhoccIndex > 0xf) {
-        adhoccIndex = 0;
-    }
-    return adhoccIndex;
-}
-
-// UtzByteToAgingTime ×Ö½Ú×ª»»ÎªÀÏ»¯Ê±¼ä
-// ÀÏ»¯Ê±¼äµ¥Î»:s
+// UtzByteToAgingTime å­—èŠ‚è½¬æ¢ä¸ºè€åŒ–æ—¶é—´
+// è€åŒ–æ—¶é—´å•ä½:s
 int UtzByteToAgingTime(uint8_t byte) {
     if (byte <= 0xf) {
         return byte;
@@ -68,8 +54,8 @@ int UtzByteToAgingTime(uint8_t byte) {
     return (byte - 0x7f) * 900 + (0x7f - 0xf) * 60 + 0xf;
 }
 
-// UtzAgingTimeToByte ÀÏ»¯Ê±¼ä×ª»»Îª×Ö½Ú
-// ÀÏ»¯Ê±¼äµ¥Î»:s
+// UtzAgingTimeToByte è€åŒ–æ—¶é—´è½¬æ¢ä¸ºå­—èŠ‚
+// è€åŒ–æ—¶é—´å•ä½:s
 uint8_t UtzAgingTimeToByte(int agingTime) {
     if (agingTime < 0) {
         return 0;

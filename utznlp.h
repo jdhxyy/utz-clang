@@ -1,5 +1,5 @@
 // Copyright 2021-2022 The jdh99 Authors. All rights reserved.
-// RFF 1£ºNetwork Layer Protocol(NLP)Éè¼Æ
+// RFF 1ï¼šNetwork Layer Protocol(NLP)è®¾è®¡
 // Authors: jdh99 <jdh821@163.com>
 
 #ifndef UTZ_NLV1_H
@@ -8,23 +8,23 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// Ğ­Òé°æ±¾
-#define UTZ_NLP_VERSION_NAME "2.0"
+// åè®®ç‰ˆæœ¬
+#define UTZ_NLP_VERSION_NAME "2.1"
 
-// ±ê×¼Í·²¿³¤¶È
-#define UTZ_NLP_HEAD_LEN 11
+// æ ‡å‡†å¤´éƒ¨é•¿åº¦
+#define UTZ_NLP_HEAD_LEN 12
 
-// ÌØÊâµØÖ·
-// Î´Ö¸¶¨µØÖ·
+// ç‰¹æ®Šåœ°å€
+// æœªæŒ‡å®šåœ°å€
 #define UTZ_IA_INVALID 0x0
-// »Ø»·µØÖ·
+// å›ç¯åœ°å€
 #define UTZ_IA_LOOPBACK 0x1
-// ¹ã²¥µØÖ·
+// å¹¿æ’­åœ°å€
 #define UTZ_IA_BROADCAST 0xFFFFFFFF
-// ¹ã²¥¶ÌµØÖ·
+// å¹¿æ’­çŸ­åœ°å€
 #define UTZ_SHORT_IA_BROADCAST 0xFFFFFFFF
 
-// IAµØÖ·×Ö½ÚÊı
+// IAåœ°å€å­—èŠ‚æ•°
 #define UTZ_IA_LEN 4
 
 // MTU
@@ -32,59 +32,50 @@
 
 #pragma pack(1)
 
-typedef union {
-    struct {
-        // Æ«ÒÆÁ¿
-        uint16_t Len:12;
-        // ×îºóÒ»Æ¬±êÊ¶
-        uint16_t Version:4;
-    } Bit;
-    uint16_t Value;
-} UtzStandardHeaderPayloadLen;
-
-// UtzStandardHeader ±ê×¼Í·²¿
-typedef struct {    
-    UtzStandardHeaderPayloadLen PayloadLen;
-    uint8_t NextHead;
+// UtzStandardHeader æ ‡å‡†å¤´éƒ¨
+typedef struct {
     uint32_t SrcIA;
     uint32_t DstIA;
+    uint8_t FrameIndex;
+    uint8_t NextHead;
+    uint16_t PayloadLen;
 } UtzStandardHeader;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 #pragma pack()
 
-// UtzBytesToStandardHeader ×Ö½ÚÁ÷×ª»»Îª±ê×¼Í·²¿.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ×Ö½ÚÁ÷data±ØĞë´óÓÚ±ê×¼Í·²¿³¤¶È
-// ·µ»ØÍ·²¿ÒÔ¼°Í·²¿×Ö½ÚÊı.×Ö½ÚÊıÎª0±íÊ¾×ª»»Ê§°Ü
+// UtzBytesToStandardHeader å­—èŠ‚æµè½¬æ¢ä¸ºæ ‡å‡†å¤´éƒ¨.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// å­—èŠ‚æµdataå¿…é¡»å¤§äºæ ‡å‡†å¤´éƒ¨é•¿åº¦
+// è¿”å›å¤´éƒ¨ä»¥åŠå¤´éƒ¨å­—èŠ‚æ•°.å­—èŠ‚æ•°ä¸º0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzBytesToStandardHeader(uint8_t* data, int dataLen, UtzStandardHeader* header);
 
-// UtzStandardHeaderToBytes ±ê×¼Í·²¿×ª»»Îª×Ö½ÚÁ÷.×Ö½ÚÁ÷ÊÇ´ó¶Ë
-// ×Ö½ÚÁ÷data±ØĞë´óÓÚ±ê×¼Í·²¿³¤¶È
-// ·µ»ØÖµÊÇ×ª»»ºóµÄ×Ö½ÚÁ÷µÄ³¤¶È.·µ»ØÖµÊÇ0±íÊ¾×ª»»Ê§°Ü
+// UtzStandardHeaderToBytes æ ‡å‡†å¤´éƒ¨è½¬æ¢ä¸ºå­—èŠ‚æµ.å­—èŠ‚æµæ˜¯å¤§ç«¯
+// å­—èŠ‚æµdataå¿…é¡»å¤§äºæ ‡å‡†å¤´éƒ¨é•¿åº¦
+// è¿”å›å€¼æ˜¯è½¬æ¢åçš„å­—èŠ‚æµçš„é•¿åº¦.è¿”å›å€¼æ˜¯0è¡¨ç¤ºè½¬æ¢å¤±è´¥
 int UtzStandardHeaderToBytes(UtzStandardHeader* header, uint8_t* data, int dataSize);
 
-// UtzConvertPayloadLenMember ÔØºÉ³¤¶È×ª»»³É±ê×¼Í·²¿ÖĞµÄÔØºÉ³¤¶È³ÉÔ±
-uint16_t UtzConvertPayloadLenMember(uint16_t payloadLen);
-
-// UtzIsGlobalIA ÊÇ·ñÊÇÈ«Çòµ¥²¥µØÖ·
+// UtzIsGlobalIA æ˜¯å¦æ˜¯å…¨çƒå•æ’­åœ°å€
 bool UtzIsGlobalIA(uint32_t ia);
 
-// UtzIsUniqueLocalIA ÊÇ·ñÊÇÎ¨Ò»±¾µØµØÖ·
+// UtzIsUniqueLocalIA æ˜¯å¦æ˜¯å”¯ä¸€æœ¬åœ°åœ°å€
 bool UtzIsUniqueLocalIA(uint32_t ia);
 
-// IsMulticastIA ÊÇ·ñÊÇ×é²¥µØÖ·
+// IsMulticastIA æ˜¯å¦æ˜¯ç»„æ’­åœ°å€
 bool UtzIsMulticastIA(uint32_t ia);
 
-// UtzIsAckCmd ÊÇ·ñÓ¦´ğÃüÁî
+// UtzIsAckCmd æ˜¯å¦åº”ç­”å‘½ä»¤
 bool UtzIsAckCmd(uint8_t cmd);
 
-// UtzGetAckCmd µÃµ½Ó¦´ğÃüÁî×Ö
+// UtzGetAckCmd å¾—åˆ°åº”ç­”å‘½ä»¤å­—
 uint8_t UtzGetAckCmd(uint8_t cmd);
 
-// UtzGetReqCmd µÃµ½ÇëÇóÃüÁî×Ö
+// UtzGetReqCmd å¾—åˆ°è¯·æ±‚å‘½ä»¤å­—
 uint8_t UtzGetReqCmd(uint8_t cmd);
 
-// UtzGetFrameLen È¥³ıÎ²×º»ñÈ¡ÕæÊµÖ¡³¤
-// ·µ»ØµÄÊÇÖ¡³¤.Èç¹û·µ»ØÖµÊÇ0±íÊ¾»ñÈ¡Ê§°Ü
+// UtzGetFrameLen å»é™¤å°¾ç¼€è·å–çœŸå®å¸§é•¿
+// è¿”å›çš„æ˜¯å¸§é•¿.å¦‚æœè¿”å›å€¼æ˜¯0è¡¨ç¤ºè·å–å¤±è´¥
 int UtzGetFrameLen(uint8_t* data, int dataLen);
+
+// UtzGetFrameIndex è·å–å¸§åºå·
+uint8_t UtzGetFrameIndex(void);
 
 #endif

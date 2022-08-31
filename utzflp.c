@@ -1,5 +1,5 @@
 // Copyright 2021-2021 The jdh99 Authors. All rights reserved.
-// RFF 3£ºFixed Length Transfer Protocol(FLP)
+// RFF 3ï¼šFixed Length Transfer Protocol(FLP)
 // Authors: jdh99 <jdh821@163.com>
 
 #include "utzflp.h"
@@ -11,9 +11,9 @@
 
 #include <string.h>
 
-// UtzBytesToFlpFrame ×Ö½ÚÁ÷×ª»»ÎªFLPÖ¡
-// fixedLenÎª0±íÊ¾²»ÊÇ¹Ì¶¨³¤¶ÈÖ¡,²»ĞèÒªÎ²×º
-// ·µ»ØÖµFLPÖ¡.Èç¹ûÊÇNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// UtzBytesToFlpFrame å­—èŠ‚æµè½¬æ¢ä¸ºFLPå¸§
+// fixedLenä¸º0è¡¨ç¤ºä¸æ˜¯å›ºå®šé•¿åº¦å¸§,ä¸éœ€è¦å°¾ç¼€
+// è¿”å›å€¼FLPå¸§.å¦‚æœæ˜¯NULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 TZBufferDynamic* UtzBytesToFlpFrame(uint8_t* data, int dataLen, bool isNeedCrc, int fixedLen) {
     int frameSize = (int)sizeof(TZBufferDynamic) + dataLen + 4;
     if (fixedLen > dataLen) {
@@ -38,7 +38,7 @@ TZBufferDynamic* UtzBytesToFlpFrame(uint8_t* data, int dataLen, bool isNeedCrc, 
         }
     }
 
-    // Î²×º³¤¶È
+    // å°¾ç¼€é•¿åº¦
     uint16_t suffixLenValue = (uint16_t)suffixLen;
     if (isNeedCrc) {
         suffixLenValue |= 0x8000;
@@ -46,24 +46,24 @@ TZBufferDynamic* UtzBytesToFlpFrame(uint8_t* data, int dataLen, bool isNeedCrc, 
     int j = 0;
     frame->buf[j++] = (uint8_t)(suffixLenValue >> 8);
     frame->buf[j++] = (uint8_t)(suffixLenValue);
-    // CRCĞ£Ñé
+    // CRCæ ¡éªŒ
     if (isNeedCrc) {
         uint16_t crc = Crc16Checksum(data, dataLen);
         frame->buf[j++] = (uint8_t)(crc >> 8);
         frame->buf[j++] = (uint8_t)(crc);
     }
-    // ÕıÎÄ
+    // æ­£æ–‡
     memcpy(frame->buf + j, data, (uint64_t)dataLen);
     j += dataLen;
-    // Î²×º
+    // å°¾ç¼€
     j += suffixLen;
 
     frame->len = j;
     return frame;
 }
 
-// UtzFlpFrameToBytes FLPÖ¡×ª»»Îª×Ö½ÚÁ÷.×Ö½ÚÁ÷ÊÇFLPÖ¡µÄÊı¾İÕıÎÄ
-// ·µ»Ø×Ö½ÚÁ÷.Èç¹ûÊÇNULL±íÊ¾×ª»»Ê§°Ü.×ª»»³É¹¦Òª×¢ÒâÊÍ·ÅÖ¸Õë
+// UtzFlpFrameToBytes FLPå¸§è½¬æ¢ä¸ºå­—èŠ‚æµ.å­—èŠ‚æµæ˜¯FLPå¸§çš„æ•°æ®æ­£æ–‡
+// è¿”å›å­—èŠ‚æµ.å¦‚æœæ˜¯NULLè¡¨ç¤ºè½¬æ¢å¤±è´¥.è½¬æ¢æˆåŠŸè¦æ³¨æ„é‡Šæ”¾æŒ‡é’ˆ
 TZBufferDynamic* UtzFlpFrameToBytes(uint8_t* frame, int frameLen) {
     if (frameLen < 2) {
         return NULL;
@@ -73,7 +73,7 @@ TZBufferDynamic* UtzFlpFrameToBytes(uint8_t* frame, int frameLen) {
     int suffixLen = (int)(suffixLenValue & 0x7FFF);
     bool isNeedCrc = (suffixLenValue >> 15) == 0x1;
 
-    // ÅĞ¶ÏÖ¡×îĞ¡³¤¶ÈÊÇ·ñÕıÈ·
+    // åˆ¤æ–­å¸§æœ€å°é•¿åº¦æ˜¯å¦æ­£ç¡®
     int calcFrameMinSize = suffixLen + 2;
     if (isNeedCrc) {
         calcFrameMinSize = suffixLen + 4;
