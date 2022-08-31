@@ -5,6 +5,7 @@
 #include "utzehp.h"
 #include "utznlp.h"
 #include "utzcommon.h"
+#include "utzadhoccmp.h"
 
 #include "tzmalloc.h"
 #include "lagan.h"
@@ -136,4 +137,14 @@ int UtzBytesToFragmentHeader(uint8_t* data, int dataLen, UtzFragmentHeader* head
     header->Offset.Value = (data[j] << 8) + data[j + 1];
     j += 2;
     return j;
+}
+
+
+// UtzIsFragmentFrame ÊÇ·ñÊÇ·ÖÆ¬Ö¡
+bool UtzIsFragmentFrame(uint8_t* data, int dataLen) {
+    int pos = sizeof(UtzStandardHeader) + sizeof(UtzAdhoccHeader) + sizeof(UtzFragmentHeader);
+    if (dataLen < pos || data[sizeof(UtzStandardHeader)] != UTZ_HEADER_SUB_FRAGMENT) {
+        return false;
+    }
+    return true;
 }

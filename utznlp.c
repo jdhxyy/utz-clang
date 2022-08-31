@@ -84,3 +84,18 @@ uint8_t UtzGetAckCmd(uint8_t cmd) {
 uint8_t UtzGetReqCmd(uint8_t cmd) {
     return cmd & 0x7f;
 }
+
+// UtzGetFrameLen 去除尾缀获取真实帧长
+// 返回的是帧长.如果返回值是0表示获取失败
+int UtzGetFrameLen(uint8_t* data, int dataLen) {
+    if (dataLen < sizeof(UtzStandardHeader)) {
+        return 0;
+    }
+
+    UtzStandardHeaderPayloadLen payloadLen;
+    payloadLen.Value = (data[0] << 8) + data[1];
+    if (dataLen < sizeof(UtzStandardHeader) + payloadLen.Bit.Len) {
+        return 0;
+    }
+    return sizeof(UtzStandardHeader) + payloadLen.Bit.Len;
+}

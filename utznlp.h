@@ -83,4 +83,8 @@ uint8_t UtzGetAckCmd(uint8_t cmd);
 // UtzGetReqCmd 得到请求命令字
 uint8_t UtzGetReqCmd(uint8_t cmd);
 
+// UtzGetFrameLen 去除尾缀获取真实帧长
+// 返回的是帧长.如果返回值是0表示获取失败
+int UtzGetFrameLen(uint8_t* data, int dataLen);
+
 #endif

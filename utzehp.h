@@ -158,4 +158,7 @@ int UtzFragmentHeaderToBytes(UtzFragmentHeader* header, uint8_t* data, int dataS
 // 返回头部以及头部字节数.字节数为0表示转换失败
 int UtzBytesToFragmentHeader(uint8_t* data, int dataLen, UtzFragmentHeader* header);
 
+// UtzIsFragmentFrame 是否是分片帧
+bool UtzIsFragmentFrame(uint8_t* data, int dataLen);
+
 #endif
