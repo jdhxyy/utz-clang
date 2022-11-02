@@ -21,7 +21,7 @@ int UtzBytesToStandardHeader(uint8_t* data, int dataLen, UtzStandardHeader* head
     j += UTZ_IA_LEN;
     header->FrameIndex = data[j++];
     header->NextHead = data[j++];
-    header->PayloadLen.Value = (data[j] << 8) + data[j + 1];
+    header->PayloadLen = (data[j] << 8) + data[j + 1];
     j += 2;
     return j;
 }
@@ -41,8 +41,8 @@ int UtzStandardHeaderToBytes(UtzStandardHeader* header, uint8_t* data, int dataS
     j += UTZ_IA_LEN;
     data[j++] = header->FrameIndex;
     data[j++] = header->NextHead;
-    data[j++] = header->PayloadLen.Value >> 8;
-    data[j++] = header->PayloadLen.Value;
+    data[j++] = header->PayloadLen >> 8;
+    data[j++] = header->PayloadLen;
     return j;
 }
 
@@ -88,7 +88,7 @@ int UtzGetFrameLen(uint8_t* data, int dataLen) {
         return 0;
     }
 
-    uint16_t payloadLen = (data[0] << 8) + data[1];
+    uint16_t payloadLen = (data[10] << 8) + data[11];
     if (dataLen < sizeof(UtzStandardHeader) + payloadLen) {
         return 0;
     }
@@ -99,5 +99,5 @@ int UtzGetFrameLen(uint8_t* data, int dataLen) {
 uint8_t UtzGetFrameIndex(void) {
     static uint8_t index = 0;
     index++;
-    return adhoccIndex;
+    return index;
 }
