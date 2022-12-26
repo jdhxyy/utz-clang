@@ -42,40 +42,40 @@ int UtzAdhoccHeaderToBytes(UtzAdhoccHeader* header, uint8_t* data, int dataSize)
     return j;
 }
 
-// UtzByteToAgingTime 字节转换为老化时间
-// 老化时间单位:s
-int UtzByteToAgingTime(uint8_t byte) {
-    if (byte <= 0xf) {
-        return byte;
-    }
-    if (byte <= 0x7f) {
-        return (byte - 0xf) * 60 + 0xf;
-    }
-    return (byte - 0x7f) * 900 + (0x7f - 0xf) * 60 + 0xf;
-}
+// // UtzByteToAgingTime 字节转换为老化时间
+// // 老化时间单位:s
+// int UtzByteToAgingTime(uint8_t byte) {
+//     if (byte <= 0xf) {
+//         return byte;
+//     }
+//     if (byte <= 0x7f) {
+//         return (byte - 0xf) * 60 + 0xf;
+//     }
+//     return (byte - 0x7f) * 900 + (0x7f - 0xf) * 60 + 0xf;
+// }
 
-// UtzAgingTimeToByte 老化时间转换为字节
-// 老化时间单位:s
-uint8_t UtzAgingTimeToByte(int agingTime) {
-    if (agingTime < 0) {
-        return 0;
-    }
+// // UtzAgingTimeToByte 老化时间转换为字节
+// // 老化时间单位:s
+// uint8_t UtzAgingTimeToByte(int agingTime) {
+//     if (agingTime < 0) {
+//         return 0;
+//     }
 
-    int value = 0;
-    int delta = agingTime - (0x7f - 0xf) * 60 - 0xf;
-    if (delta > 0) {
-        value += delta / 900;
-        agingTime -= delta;
-    }
-    delta = agingTime - 0xf;
-    if (delta > 0) {
-        value += delta / 60;
-        agingTime -= delta;
-    }
-    value += agingTime;
-    if (value > 0xff) {
-        return 0xff;
-    } else {
-        return value & 0xff;
-    }
-}
+//     int value = 0;
+//     int delta = agingTime - (0x7f - 0xf) * 60 - 0xf;
+//     if (delta > 0) {
+//         value += delta / 900;
+//         agingTime -= delta;
+//     }
+//     delta = agingTime - 0xf;
+//     if (delta > 0) {
+//         value += delta / 60;
+//         agingTime -= delta;
+//     }
+//     value += agingTime;
+//     if (value > 0xff) {
+//         return 0xff;
+//     } else {
+//         return value & 0xff;
+//     }
+// }

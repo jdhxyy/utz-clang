@@ -12,6 +12,7 @@
 #include "utzflp.h"
 #include "utzccp.h"
 #include "utzadhoccmp.h"
+#include "utztcp.h"
 #include "utzdup.h"
 
 #endif

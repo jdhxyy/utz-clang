@@ -1,30 +1,27 @@
 // Copyright 2021-2021 The jdh99 Authors. All rights reserved.
 // RFF 27：TZ-STAR自组网系统设计
-// Ad Hoc Newwork Control Message Protocol(ADHOCCMP):自组网控制报文协议
+// Transmission Control Protocol(TCP):传输控制报文协议
 // Authors: jdh99 <jdh821@163.com>
 
-#ifndef UTZ_ADHOCCHEADER_H
-#define UTZ_ADHOCCHEADER_H
+#ifndef UTZ_TCP_H
+#define UTZ_TCP_H
 
 #include "utzcommon.h"
 
 // 版本
-#define UTZ_ADHOCCMP_VERSION_NAME "1.2"
-
-// 自组网控制头部长度
-#define HEADER_ADHOCC_LEN 15
+#define UTZ_TCP_VERSION_NAME "1.3"
 
 // 命令
 // 信标
-#define UTZ_ADHOCCMP_BEACON 0x10
+#define UTZ_TCP_BEACON 0x10
 // 应答
-#define UTZ_ADHOCCMP_ACK 0x11
+#define UTZ_TCP_ACK 0x11
 // 请求推送
-#define UTZ_ADHOCCMP_REQUIRE_PUSH 0x12
+#define UTZ_TCP_REQUIRE_PUSH 0x12
 
 #pragma pack(1)
 
-// UtzAdhoccHeaderControlWord 自组网控制头部控制字
+// UtzTcpHeaderControlWord 传输控制头部控制字
 typedef union {
     struct {
         // 序号
@@ -39,9 +36,9 @@ typedef union {
         bool IsAckSend:1;
     } Bit;
     uint8_t Value;
-} UtzAdhoccHeaderControlWord;
+} UtzTcpHeaderControlWord;
 
-// UtzAdhoccHeader 自组网控制头部结构
+// UtzTcpHeader 传输控制头部结构
 typedef struct {
     uint8_t NextHead;
     // 中继源地址
@@ -49,13 +46,13 @@ typedef struct {
     // 中继目的地址
     uint32_t DstIA;
     // 控制字
-    UtzAdhoccHeaderControlWord ControlWord;
+    UtzTcpHeaderControlWord ControlWord;
     // 老化时间
     uint8_t AgingTime;
-} UtzAdhoccHeader;
+} UtzTcpHeader;
 
 // 通信结构体定义
-// UtzAdhoccmpBeacon 信标
+// UtzTcpBeacon 信标
 typedef struct {
     // 网络地址
     uint32_t PanIA;
@@ -65,40 +62,40 @@ typedef struct {
     uint8_t Hops;
     // 开销值
     uint8_t Cost;
-} UtzAdhoccmpBeacon;
+} UtzTcpBeacon;
 
-// UtzAdhoccmpAck 应答
+// UtzTcpAck 应答
 typedef struct {
     // 发送帧中的帧序号
     uint8_t Index;
     // 发送帧的源地址
     uint32_t IA;
-} UtzAdhoccmpAck;
+} UtzTcpAck;
 
-// UtzAdhoccmpRequirePush 请求推送
+// UtzTcpRequirePush 请求推送
 typedef struct {
     // 上次推送序号
     uint8_t LastPushIndex;
     // 上次推送源地址
     uint32_t LastPushSrcIA;
-} UtzAdhoccmpRequirePush;
+} UtzTcpRequirePush;
 
 #pragma pack()
 
-// UtzBytesToAdhoccHeader 字节流转换为自组网控制头部
+// UtzBytesToTcpHeader 字节流转换为传输控制头部
 // 返回头部以及头部字节数.字节数为0表示转换失败
-int UtzBytesToAdhoccHeader(uint8_t* data, int dataLen, UtzAdhoccHeader* header);
+int UtzBytesToTcpHeader(uint8_t* data, int dataLen, UtzTcpHeader* header);
 
-// UtzADHOCCHeaderToBytes 自组网控制头部转换为字节流.转换后存储于bytes中
+// UtzTcpHeaderToBytes 传输控制头部转换为字节流.转换后存储于bytes中
 // 返回值是转换后的字节流的长度.返回值是0表示转换失败
-int UtzAdhoccHeaderToBytes(UtzAdhoccHeader* header, uint8_t* data, int dataSize);
+int UtzTcpHeaderToBytes(UtzTcpHeader* header, uint8_t* data, int dataSize);
 
-// // UtzByteToAgingTime 字节转换为老化时间
-// // 老化时间单位:s
-// int UtzByteToAgingTime(uint8_t byte);
+// UtzByteToAgingTime 字节转换为老化时间
+// 老化时间单位:s
+int UtzByteToAgingTime(uint8_t byte);
 
-// // UtzAgingTimeToByte 老化时间转换为字节
-// // 老化时间单位:s
-// uint8_t UtzAgingTimeToByte(int agingTime);
+// UtzAgingTimeToByte 老化时间转换为字节
+// 老化时间单位:s
+uint8_t UtzAgingTimeToByte(int agingTime);
 
 #endif

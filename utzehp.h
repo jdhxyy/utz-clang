@@ -55,8 +55,9 @@
 #define UTZ_HEADER_TIMESTAMP 0x15
 // 代理头部
 #define UTZ_HEADER_AGENT 0x16
-// 自组网控制头部
+// 传输控制头部
 #define UTZ_HEADER_ADHOCC 0x17
+#define UTZ_HEADER_TCP 0x17
 // 压缩头部复合帧
 #define UTZ_HEADER_COMPRESS_COMPLEX 0x18
 // 标准头部复合帧
