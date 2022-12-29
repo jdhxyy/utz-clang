@@ -9,7 +9,7 @@
 // 返回头部以及头部字节数.字节数为0表示转换失败
 int UtzBytesToAdhoccHeader(uint8_t* data, int dataLen, UtzAdhoccHeader* header) {
     // 头部数据必须完整
-    if (dataLen < HEADER_ADHOCC_LEN) {
+    if (dataLen < sizeof(UtzAdhoccHeader)) {
         return 0;
     }
 
@@ -27,7 +27,7 @@ int UtzBytesToAdhoccHeader(uint8_t* data, int dataLen, UtzAdhoccHeader* header) 
 // UtzADHOCCHeaderToBytes 自组网控制头部转换为字节流.转换后存储于bytes中
 // 返回值是转换后的字节流的长度.返回值是0表示转换失败
 int UtzAdhoccHeaderToBytes(UtzAdhoccHeader* header, uint8_t* data, int dataSize) {
-    if (dataSize < HEADER_ADHOCC_LEN) {
+    if (dataSize < sizeof(UtzAdhoccHeader)) {
         return 0;
     }
 

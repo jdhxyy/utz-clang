@@ -11,9 +11,6 @@
 // 版本
 #define UTZ_ADHOCCMP_VERSION_NAME "1.2"
 
-// 自组网控制头部长度
-#define HEADER_ADHOCC_LEN 15
-
 // 命令
 // 信标
 #define UTZ_ADHOCCMP_BEACON 0x10
