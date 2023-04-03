@@ -3,8 +3,8 @@
 // Ad Hoc Newwork Control Message Protocol(ADHOCCMP):自组网控制报文协议
 // Authors: jdh99 <jdh821@163.com>
 
-#ifndef UTZ_ADHOCCHEADER_H
-#define UTZ_ADHOCCHEADER_H
+#ifndef UTZ_ADHOCCCMP_H
+#define UTZ_ADHOCCCMP_H
 
 #include "utzcommon.h"
 
