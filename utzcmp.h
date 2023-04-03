@@ -1,4 +1,4 @@
-// Copyright 2021-2022 The jdh99 Authors. All rights reserved.
+// Copyright 2021-2023 The jdh99 Authors. All rights reserved.
 // RFF 4：Control Message Protocol(CMP)
 // Authors: jdh99 <jdh821@163.com>
 
@@ -10,17 +10,10 @@
 // 版本
 #define UTZ_CMP_VERSION_NAME "1.2"
 
-// 消息类型
+#pragma pack(1)
+
 // 申请从机
 #define UTZ_CMP_APPLY_SLAVE 0x25
-// 连接父路由
-#define UTZ_CMP_CONNECT_PARENT 0x26
-// 读取在线状态
-#define UTZ_CMP_READ_ONLINE_STATE 0x3B
-// 推送在线状态
-#define UTZ_CMP_PUSH_ONLINE_STATE 0x3C
-
-#pragma pack(1)
 
 // 通信结构体定义
 // UtzCmpReqApplySlave 申请从机帧请求
@@ -53,6 +46,9 @@ typedef struct {
 // 失败,无从机
 #define UTZ_CMP_APPLY_SLAVE_RESULT_NO_SLAVE 0x3
 
+// 连接父路由
+#define UTZ_CMP_CONNECT_PARENT 0x26
+
 // UtzCmpAckApplySlave 连接父路由应答
 typedef struct {
     // 结果
@@ -71,21 +67,125 @@ typedef struct {
 // 失败,无权限连接
 #define UTZ_CMP_CONNECT_PARENT_RESULT_NO_PERSSION 0x3
 
+// 配置IA地址
+#define UTZ_CMP_SET_IA 0x2C
+
+// 请求
+typedef struct {
+    uint32_t IA;
+} UtzCmpReqSetIA;
+
+// 读取IA地址
+#define UTZ_CMP_GET_IA 0x2D
+
+// 应答
+typedef struct {
+    uint32_t IA;
+} UtzCmpAckSetIA;
+
+// 配置设备类型
+#define UTZ_SET_DEVICE_TYPE 0x2E
+
+// 请求
+typedef struct {
+    uint16_t DeviceType;
+} UtzCmpReqSetDeviceType;
+
+// 读取设备类型
+#define UTZ_GET_DEVICE_TYPE 0x2F
+
+// 应答
+typedef struct {
+    uint16_t DeviceType;
+} UtzCmpAckGetDeviceType;
+
+// 读取在线状态
+#define UTZ_CMP_READ_ONLINE_STATE 0x3B
+
 // UtzCmpReadOnlineState 读取在线状态应答
 typedef struct {
-    // 在线状态.0：掉线。1：在线
-    uint8_t IsOnline;
+    // 在线类型
+    uint8_t OnlineType;
     // 父路由全球单播地址
     uint32_t IA;
 } UtzCmpAckReadOnlineState;
 
+// 在线类型
+#define UTZ_CMP_ONLINE_TYPE_OFFLINE 0
+#define UTZ_CMP_ONLINE_TYPE_ETH 1
+#define UTZ_CMP_ONLINE_TYPE_WIFI 2
+#define UTZ_CMP_ONLINE_TYPE_GPRS 3
+#define UTZ_CMP_ONLINE_TYPE_OTHER 4
+
+// 推送在线状态
+#define UTZ_CMP_PUSH_ONLINE_STATE 0x3C
+
 // 推送在线状态请求
 typedef struct {
-    // 在线状态.0：掉线。1：在线
-    uint8_t IsOnline;
+    // 在线类型
+    uint8_t OnlineType;
     // 父路由全球单播地址
     uint32_t IA;
 } UtzCmpReqPushOnlineState;
+
+// 配置WIFI参数
+#define UTZ_CMP_SET_WIFI_PARAM 0x3F
+
+// 配置wifi参数
+typedef struct {
+    // 序号.从0开始
+    uint8_t Index;
+    // 标志
+    uint8_t Flag;
+    // WIFI名称字节数
+    uint8_t SsidLen;
+    // WIFI密码字节数
+    uint8_t PwdLen;
+    // 数据
+    uint8_t Data[0];
+} UtzCmpReqSetWifiParam;
+
+typedef struct {
+    // 结果
+    uint8_t Result;
+} UtzCmpAckSetWifiParam;
+
+// 失败结果.成功为0
+// 失败,其他
+#define UTZ_CMP_SET_WIFI_PARAM_RESULT_OTHER 0x1
+// 失败,已达配置上限
+#define UTZ_CMP_SET_WIFI_PARAM_RESULT_TOO_MANY 0x2
+
+// 读取WIFI参数
+#define UTZ_CMP_GET_WIFI_PARAM 0x40
+
+// 读取WIFI参数
+typedef struct {
+    // 序号.从0开始
+    uint8_t Index;
+} UtzCmpReqGetWifiParam;
+
+typedef struct {
+    // 结果
+    uint8_t Result;
+
+    // 序号.从0开始
+    uint8_t Index;
+    // 标志
+    uint8_t Flag;
+    // WIFI名称字节数
+    uint8_t SsidLen;
+    // WIFI密码字节数
+    uint8_t PwdLen;
+    // 数据
+    uint8_t Data[0];
+} UtzCmpAckGetWifiParam;
+
+// 失败结果.成功为0
+// 失败,其他
+#define UTZ_CMP_GET_WIFI_PARAM_RESULT_OTHER 0x1
+// 失败,无此序号的WIFI热点
+#define UTZ_CMP_GET_WIFI_PARAM_RESULT_NOT_EXIST 0x2
 
 #pragma pack()
 
