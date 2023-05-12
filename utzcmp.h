@@ -12,6 +12,37 @@
 
 #pragma pack(1)
 
+// 复位设备
+#define UTZ_CMP_RESET 0x22
+
+// 设置本机网络参数
+#define UTZ_CMP_SET_NET_PARAM 0x23
+
+// UtzCmpReqSetNet 请求
+typedef struct {
+    // DHCP开关.0:关.1:开
+    uint8_t Dhcp;
+    uint32_t IP;
+    uint32_t Mask;
+    uint32_t Gateway;
+    uint16_t Port;
+    uint32_t Dns;
+} UtzCmpReqSetNetParam;
+
+// 读取本机网络参数
+#define UTZ_CMP_GET_NET_PARAM 0x24
+
+// UtzCmpAckSetNetParam 应答
+typedef struct {
+    // DHCP开关.0:关.1:开
+    uint8_t Dhcp;
+    uint32_t IP;
+    uint32_t Mask;
+    uint32_t Gateway;
+    uint16_t Port;
+    uint32_t Dns;
+} UtzCmpAckGetNetParam;
+
 // 申请从机
 #define UTZ_CMP_APPLY_SLAVE 0x25
 
