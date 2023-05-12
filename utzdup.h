@@ -97,6 +97,8 @@ typedef struct {
     uint8_t UpgradeFileVersion;
     // 偏移地址
     uint32_t Offset;
+    // 升级数据最大字节数
+    uint16_t DataLenMax;
 } UtzDupReqReadUpgradeFileData;
 
 // UtzDupAckReadUpgradeFileData 读取升级文件数据应答
