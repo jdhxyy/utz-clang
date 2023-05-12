@@ -173,7 +173,7 @@ typedef struct {
     // WIFI密码字节数
     uint8_t PwdLen;
     // 数据
-    uint8_t Data[0];
+    uint8_t Data[];
 } UtzCmpReqSetWifiParam;
 
 typedef struct {
@@ -209,7 +209,7 @@ typedef struct {
     // WIFI密码字节数
     uint8_t PwdLen;
     // 数据
-    uint8_t Data[0];
+    uint8_t Data[];
 } UtzCmpAckGetWifiParam;
 
 // 失败结果.成功为0
