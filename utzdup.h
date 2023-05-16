@@ -115,6 +115,41 @@ typedef struct {
     uint8_t Data[];
 } UtzDupAckReadUpgradeFileData;
 
+// 读取升级文件信息B型
+#define UTZ_DUP_READ_FILE_INFO_B_TYPE 0x17
+
+// UtzDupReqReadUpgradeFileInfoBType 请求
+typedef struct {
+    // 设备类型
+    uint16_t DeviceType;
+    // 当前版本号
+    uint8_t Version;
+
+    // 父节点信息
+    // IA地址
+    uint32_t ParentIA;
+    // 当前跳数
+    uint8_t ParentHops;
+    // rssi值
+    uint8_t ParentRssi;
+    // 丢包率
+    uint8_t ParentPlp;
+} UtzDupReqReadUpgradeFileInfoBType;
+
+// UtzDupAckReadUpgradeFileInfoBType 应答
+typedef struct {
+    // 文件设备类型
+    uint16_t FileDeviceType;
+    // 文件软件版本
+    uint8_t FileVersion;
+    // 文件总字节数
+    uint32_t FileTotalBytes;
+    // 校验方式.0:MD5,1:CRC16,2:CRC32
+    uint8_t CheckType;
+    // 文件校验码
+    uint8_t FileCheckSum[16];
+} UtzDupAckReadUpgradeFileInfoBType;
+
 #pragma pack()
 
 #endif
