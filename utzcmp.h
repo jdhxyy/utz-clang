@@ -218,6 +218,46 @@ typedef struct {
 // 失败,无此序号的WIFI热点
 #define UTZ_CMP_GET_WIFI_PARAM_RESULT_NOT_EXIST 0x2
 
+// 读取统计
+#define UTZ_CMP_GET_STATISTICS 0x49
+
+typedef struct {
+    // 统计组序号.序号从0开始
+    uint8_t Index;
+} UtzCmpReqGetStatistics;
+
+typedef struct {
+    // 设备类型
+    uint16_t DeviceType;
+    // 软件版本
+    uint8_t Version;
+    // 统计组序号
+    uint8_t Index;
+    // 统计数据条目数
+    uint8_t ItemNum;
+    // 统计数据
+    uint32_t Items[];
+} UtzCmpAckGetStatistics;
+
+// 清除统计
+#define UTZ_CMP_CLEAR_STATISTICS 0x4A
+
+// 推送统计
+#define UTZ_CMP_PUSH_STATISTICS 0x4B
+
+typedef struct {
+    // 设备类型
+    uint16_t DeviceType;
+    // 软件版本
+    uint8_t Version;
+    // 统计组序号
+    uint8_t Index;
+    // 统计数据条目数
+    uint8_t ItemNum;
+    // 统计数据
+    uint32_t Items[];
+} UtzCmpReqPushStatistics;
+
 #pragma pack()
 
 #endif
