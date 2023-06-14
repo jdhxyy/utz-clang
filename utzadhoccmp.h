@@ -54,14 +54,24 @@ typedef struct {
 // 通信结构体定义
 // UtzAdhoccmpBeacon 信标
 typedef struct {
-    // 网络地址
+    // 网络号
     uint32_t PanIA;
+
     // 父节点地址
     uint32_t ParentIA;
+    // 父节点RSSI.本RSSI值经过计算和滤波
+    uint8_t ParentRssi;
+    // 父节点真实RSSI
+    uint8_t ParentRealRssi;
+
     // 多跳数
     uint8_t Hops;
     // 开销值
     uint8_t Cost;
+    // 链路时间戳.单位:s
+    uint32_t LinkTimestamp;
+    // 静默标志.0:未静默.1:静默
+    uint8_t IsSilent;
 } UtzAdhoccmpBeacon;
 
 // UtzAdhoccmpAck 应答

@@ -130,10 +130,18 @@ typedef struct {
     uint32_t ParentIA;
     // 当前跳数
     uint8_t ParentHops;
-    // rssi值
+    // rssi值.计算并且滤波后的值
     uint8_t ParentRssi;
+    // rssi真实值
+    uint8_t ParentRealRssi;
     // 丢包率
     uint8_t ParentPlp;
+    // 链路时间戳.单位:s
+    uint32_t ParentLinkTimestamp;
+
+    // 本机信息
+    // 链路时间戳.单位:s
+    uint32_t LinkTimestamp;
 } UtzDupReqReadUpgradeFileInfoBType;
 
 // UtzDupAckReadUpgradeFileInfoBType 应答
