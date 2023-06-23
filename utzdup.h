@@ -142,6 +142,8 @@ typedef struct {
     // 本机信息
     // 链路时间戳.单位:s
     uint32_t LinkTimestamp;
+    // 是否静默
+    uint8_t IsSilent;
 } UtzDupReqReadUpgradeFileInfoBType;
 
 // UtzDupAckReadUpgradeFileInfoBType 应答
