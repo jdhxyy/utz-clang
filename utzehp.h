@@ -58,10 +58,8 @@
 // 传输控制头部
 #define UTZ_HEADER_ADHOCC 0x17
 #define UTZ_HEADER_TCP 0x17
-// 压缩头部复合帧
-#define UTZ_HEADER_COMPRESS_COMPLEX 0x18
 // 标准头部复合帧
-#define UTZ_HEADER_STANDARD_COMPLEX 0x19
+#define UTZ_HEADER_COMPLEX 0x19
 // 全球单播地址分配服务器访问协议
 #define UTZ_HEADER_GUAAP 0x1A
 // 固定地址解析服务器访问协议
@@ -123,6 +121,15 @@ typedef struct {
     UtzFragmentOffset Offset;
 } UtzFragmentHeader;
 
+// UtzComplexHeader 复合帧头部
+typedef struct {
+    uint8_t NextHead;
+    // 子节点数量
+    uint8_t ChildNum;
+    // 子节点IA
+    uint32_t ChildIA[];
+} UtzComplexHeader;
+
 #pragma pack()
 
 // UtzBytesToRouteHeader 字节流转换为路由头部.字节流是大端
@@ -161,5 +168,20 @@ int UtzBytesToFragmentHeader(uint8_t* data, int dataLen, UtzFragmentHeader* head
 
 // UtzIsFragmentFrame 是否是分片帧
 bool UtzIsFragmentFrame(uint8_t* data, int dataLen);
+
+// UtzBytesToComplexHeader 字节流转换为复合帧头部.字节流是大端
+// 返回头部以及头部字节数.头部为nil或者字节数为0表示转换失败
+int UtzBytesToComplexHeader(uint8_t* data, int dataLen, UtzComplexHeader* header);
+
+// UtzComplexHeaderToBytes 复合帧头部转换为字节流
+// 字节流data必须大于复合帧头部长度
+// 返回值是转换后的字节流的长度.返回值是0表示转换失败
+int UtzComplexHeaderToBytes(UtzComplexHeader* header, uint8_t* data, int dataSize);
+
+// UtzComplexHeaderGetSizeByChildNum 根据子节点数量获取复合帧头部长度
+int UtzComplexHeaderGetSizeByChildNum(int childNum);
+
+// UtzComplexHeaderGetSize 获取复合帧头部的长度
+int UtzComplexHeaderGetSize(UtzComplexHeader* header);
 
 #endif

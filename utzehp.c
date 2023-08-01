@@ -42,8 +42,7 @@ int UtzRouteHeaderToBytes(UtzRouteHeader* header, uint8_t* data, int dataSize) {
 bool UtzIsPayloadHeader(uint8_t head) {
     return (head == UTZ_HEADER_CCP || head == UTZ_HEADER_RP || head == UTZ_HEADER_FLP || head == UTZ_HEADER_WTS || 
         head == UTZ_HEADER_DUP || head == UTZ_HEADER_SFTPA || head == UTZ_HEADER_SFTPB || head == UTZ_HEADER_STCP || 
-        head == UTZ_HEADER_ITCP || head == UTZ_HEADER_DAP || head == UTZ_HEADER_COMPRESS_COMPLEX || 
-        head == UTZ_HEADER_STANDARD_COMPLEX || head == UTZ_HEADER_GUAAP || head == UTZ_HEADER_SLP || 
+        head == UTZ_HEADER_ITCP || head == UTZ_HEADER_DAP || head == UTZ_HEADER_GUAAP || head == UTZ_HEADER_SLP || 
         head == UTZ_HEADER_DCOM || head == UTZ_HEADER_ISH);
     }
 
@@ -147,4 +146,45 @@ bool UtzIsFragmentFrame(uint8_t* data, int dataLen) {
         return false;
     }
     return true;
+}
+
+// UtzBytesToComplexHeader 字节流转换为复合帧头部.字节流是大端
+// 返回头部以及头部字节数.头部为nil或者字节数为0表示转换失败
+int UtzBytesToComplexHeader(uint8_t* data, int dataLen, UtzComplexHeader* header) {
+    // 头部数据必须完整
+    if (dataLen < sizeof(UtzComplexHeader) || dataLen < sizeof(UtzComplexHeader) + data[1] * 4) {
+        return 0;
+    }
+
+    header->NextHead = data[0];
+    header->ChildNum = data[1];
+    for (int i = 0; i < header->ChildNum; i++) {
+        header->ChildIA[i] = UtzBytesToIA(data + 2 + i * 4);
+    }
+    return sizeof(UtzComplexHeader) + header->ChildNum * 4;
+}
+
+// UtzComplexHeaderToBytes 复合帧头部转换为字节流
+// 字节流data必须大于复合帧头部长度
+// 返回值是转换后的字节流的长度.返回值是0表示转换失败
+int UtzComplexHeaderToBytes(UtzComplexHeader* header, uint8_t* data, int dataSize) {
+    if (dataSize < sizeof(UtzComplexHeader) + header->ChildNum * 4) {
+        return 0;
+    }
+    data[0] = header->NextHead;
+    data[1] = header->ChildNum;
+    for (int i = 0; i < header->ChildNum; i++) {
+        UtzIAToBytes(header->ChildIA[i], data + 2 + i * 4);
+    }
+    return sizeof(UtzComplexHeader) + header->ChildNum * 4;
+}
+
+// UtzComplexHeaderGetSizeByChildNum 根据子节点数量获取复合帧头部长度
+int UtzComplexHeaderGetSizeByChildNum(int childNum) {
+    return sizeof(UtzComplexHeader) + childNum * 4;
+}
+
+// UtzComplexHeaderGetSize 获取复合帧头部的长度
+int UtzComplexHeaderGetSize(UtzComplexHeader* header) {
+    return sizeof(UtzComplexHeader) + header->ChildNum * 4;
 }
