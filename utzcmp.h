@@ -219,6 +219,38 @@ typedef struct {
 // 失败,无此序号的WIFI热点
 #define UTZ_CMP_GET_WIFI_PARAM_RESULT_NOT_EXIST 0x2
 
+// 设置核心网参数
+#define UTZ_CMP_SET_CORE_PARAM 0x41
+
+typedef struct {
+    // IA
+    uint32_t IA;
+    // 端口
+    uint16_t Port;
+    // IP
+    uint32_t IP;
+    // 域名长度
+    uint8_t DomainNameLen;
+    // 域名
+    char DomainName[];
+} UtzCmpReqSetCoreParam;
+
+// 读取核心网参数
+#define UTZ_CMP_GET_CORE_PARAM 0x42
+
+typedef struct {
+    // IA
+    uint32_t IA;
+    // 端口
+    uint16_t Port;
+    // IP
+    uint32_t IP;
+    // 域名长度
+    uint8_t DomainNameLen;
+    // 域名
+    char DomainName[];
+} UtzCmpAckGetCoreParam;
+
 // 读取统计
 #define UTZ_CMP_GET_STATISTICS 0x49
 
