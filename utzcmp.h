@@ -112,7 +112,7 @@ typedef struct {
 // 应答
 typedef struct {
     uint32_t IA;
-} UtzCmpAckSetIA;
+} UtzCmpAckGetIA;
 
 // 配置设备类型
 #define UTZ_SET_DEVICE_TYPE 0x2E
@@ -129,6 +129,13 @@ typedef struct {
 typedef struct {
     uint16_t DeviceType;
 } UtzCmpAckGetDeviceType;
+
+// 读取板卡类型
+#define UTZ_CMP_GET_BOARD_TYPE 0x38
+
+typedef struct {
+    char BoardType[15];
+} UtzCmpReqGetBoardType;
 
 // 读取在线状态
 #define UTZ_CMP_READ_ONLINE_STATE 0x3B
@@ -250,6 +257,13 @@ typedef struct {
     // 域名
     char DomainName[];
 } UtzCmpAckGetCoreParam;
+
+// 读取业务服务器地址
+#define UTZ_CMP_GET_SERVER_IA 0x44
+
+typedef struct {
+    uint32_t IA;
+} UtzCmpAckGetServerIA;
 
 // 读取统计
 #define UTZ_CMP_GET_STATISTICS 0x49
