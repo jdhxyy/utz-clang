@@ -258,7 +258,14 @@ typedef struct {
     char DomainName[];
 } UtzCmpAckGetCoreParam;
 
-// 读取业务服务器地址
+// 设置业务服务器IA地址
+#define UTZ_CMP_SET_SERVER_IA 0x43
+
+typedef struct {
+    uint32_t IA;
+} UtzCmpReqSetServerIA;
+
+// 读取业务服务器IA地址
 #define UTZ_CMP_GET_SERVER_IA 0x44
 
 typedef struct {
