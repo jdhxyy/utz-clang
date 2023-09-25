@@ -144,6 +144,11 @@ typedef struct {
     uint32_t LinkTimestamp;
     // 是否静默
     uint8_t IsSilent;
+
+    // 锚节点.0表示无效
+    uint32_t AnchorIA;
+    // 自动静默开关.0:关闭.1:开启
+    uint8_t AutoSilent;
 } UtzDupReqReadUpgradeFileInfoBType;
 
 // UtzDupAckReadUpgradeFileInfoBType 应答

@@ -312,6 +312,64 @@ typedef struct {
     uint32_t Items[];
 } UtzCmpReqPushStatistics;
 
+// 设置波特率
+#define UTZ_CMP_SET_BAUD_RATE 0x4C
+
+typedef struct {
+    // 波特率
+    uint32_t BaudRate;
+} UtzCmpReqSetBaudRate;
+
+// 读取波特率
+#define UTZ_CMP_GET_BAUD_RATE 0x4D
+
+typedef struct {
+    // 波特率
+    uint32_t BaudRate;
+} UtzCmpAckGetBaudRate;
+
+// 设置RSSI归一化系数
+#define UTZ_CMP_SET_RSSI_RATIO 0x4E
+
+typedef struct {
+    uint16_t Ratio;
+} UtzCmpReqSetRssiRatio;
+
+// 读取RSSI归一化系数
+#define UTZ_CMP_GET_RSSI_RATIO 0x4F
+
+typedef struct {
+    uint16_t Ratio;
+} UtzCmpAckGetRssiRatio;
+
+// 设置锚节点
+#define UTZ_CMP_SET_ANCHOR_IA 0x50
+
+typedef struct {
+    uint32_t AnchorIA;
+} UtzCmpReqSetAnchorIA;
+
+// 读取锚节点
+#define UTZ_CMP_GET_ANCHOR_IA 0x51
+
+typedef struct {
+    uint32_t AnchorIA;
+} UtzCmpAckGetAnchorIA;
+
+// 设置自动静默开关
+#define UTZ_CMP_SET_AUTO_SILENT 0x52
+
+typedef struct {
+    uint8_t AutoSilent;
+} UtzCmpReqSetAutoSilent;
+
+// 读取自动静默开关
+#define UTZ_CMP_GET_AUTO_SILENT 0x53
+
+typedef struct {
+    uint8_t AutoSilent;
+} UtzCmpAckGetAutoSilent;
+
 #pragma pack()
 
 #endif
